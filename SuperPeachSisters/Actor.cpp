@@ -1,4 +1,12 @@
 #include "Actor.h"
 #include "StudentWorld.h"
 
-// Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
+
+
+Actor::Actor(int ID, int startX, int startY, int startDirection, int depth, double size): GraphObject (ID, startX, startY, startDirection, depth, size)
+{
+    
+    
+    
+    
+}

@@ -6,7 +6,7 @@
 class Actor: public GraphObject
 {
 public:
-    Actor();
+    Actor(int ID, int startX, int startY, int startDirection, int depth, double size);
     virtual ~Actor();
     
     
