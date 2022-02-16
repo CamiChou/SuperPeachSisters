@@ -3,6 +3,7 @@
 
 #include "GameConstants.h"
 #include <string>
+#include "Block.h"
 
 const int START_PLAYER_LIVES = 3;
 
@@ -90,6 +91,8 @@ private:
 	int				m_level;
 	GameController* m_controller;
 	std::string		m_assetPath;
+    Peach* myPeach; 
+    
 };
 
 #endif // GAMEWORLD_H_

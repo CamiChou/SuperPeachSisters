@@ -4,6 +4,10 @@
 #include "GameWorld.h"
 #include "Level.h"
 #include <string>
+#include "Actor.h"
+#include "GameConstants.h"
+
+
 
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
@@ -20,7 +24,9 @@ public:
     
 
 private:
-    Peach* myPeach; 
+    Peach* myPeach;
+    std::vector<Actor*> actorVect;
+    
 };
 
 #endif // STUDENTWORLD_H_

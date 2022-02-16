@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B79541327BB162200327355 /* Peach.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B79541127BB162200327355 /* Peach.cpp */; };
-		3B79541627BB289B00327355 /* MovingActor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B79541427BB289B00327355 /* MovingActor.cpp */; };
+		3BA97E5B27BC703900D676D8 /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BA97E5927BC703900D676D8 /* Block.cpp */; };
 		4B91F8BF2033F3F8003AFA78 /* GameWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B91F8B12033F3F7003AFA78 /* GameWorld.cpp */; };
 		4B91F8C02033F3F8003AFA78 /* StudentWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B91F8B22033F3F7003AFA78 /* StudentWorld.cpp */; };
 		4B91F8C12033F3F8003AFA78 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B91F8B42033F3F7003AFA78 /* main.cpp */; };
@@ -30,10 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3B79541127BB162200327355 /* Peach.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Peach.cpp; sourceTree = "<group>"; };
-		3B79541227BB162200327355 /* Peach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Peach.h; sourceTree = "<group>"; };
-		3B79541427BB289B00327355 /* MovingActor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MovingActor.cpp; sourceTree = "<group>"; };
-		3B79541527BB289B00327355 /* MovingActor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MovingActor.h; sourceTree = "<group>"; };
+		3BA97E5927BC703900D676D8 /* Block.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
+		3BA97E5A27BC703900D676D8 /* Block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Block.h; sourceTree = "<group>"; };
 		4B91F8A52033F260003AFA78 /* SuperPeachSisters */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SuperPeachSisters; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B91F8AF2033F3F7003AFA78 /* GraphObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphObject.h; sourceTree = "<group>"; };
 		4B91F8B02033F3F7003AFA78 /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Actor.h; sourceTree = "<group>"; };
@@ -99,10 +96,8 @@
 				4B91F8BC2033F3F7003AFA78 /* SpriteManager.h */,
 				4B91F8B22033F3F7003AFA78 /* StudentWorld.cpp */,
 				4B91F8BE2033F3F8003AFA78 /* StudentWorld.h */,
-				3B79541127BB162200327355 /* Peach.cpp */,
-				3B79541227BB162200327355 /* Peach.h */,
-				3B79541427BB289B00327355 /* MovingActor.cpp */,
-				3B79541527BB289B00327355 /* MovingActor.h */,
+				3BA97E5927BC703900D676D8 /* Block.cpp */,
+				3BA97E5A27BC703900D676D8 /* Block.h */,
 			);
 			path = SuperPeachSisters;
 			sourceTree = "<group>";
@@ -175,10 +170,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B91F8C32033F3F8003AFA78 /* GameController.cpp in Sources */,
+				3BA97E5B27BC703900D676D8 /* Block.cpp in Sources */,
 				4B91F8C02033F3F8003AFA78 /* StudentWorld.cpp in Sources */,
 				4B91F8BF2033F3F8003AFA78 /* GameWorld.cpp in Sources */,
-				3B79541627BB289B00327355 /* MovingActor.cpp in Sources */,
-				3B79541327BB162200327355 /* Peach.cpp in Sources */,
 				4B91F8C12033F3F8003AFA78 /* main.cpp in Sources */,
 				4B91F8C22033F3F8003AFA78 /* Actor.cpp in Sources */,
 			);
