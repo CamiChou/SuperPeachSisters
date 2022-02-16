@@ -57,6 +57,26 @@ private:
 
 
 
+class Block:public Actor
+{
+public:
+    Block(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw);
+    ~Block();
+    void doSomething();
+    
+    
+    
+    
+private:
+    
+    
+    
+    
+    
+};
+
+
+
 
 
 

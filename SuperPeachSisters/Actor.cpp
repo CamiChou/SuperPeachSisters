@@ -85,3 +85,39 @@ Peach::~Peach()
 {
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Block::Block(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw):
+Actor( ID,  startX,  startY,  startDirection,  depth,  size, sw)
+{
+    
+}
+
+
+
+
+
+Block::~Block()
+{
+    
+}
+
+
+
+
+void Block::doSomething()
+{
+    
+}
