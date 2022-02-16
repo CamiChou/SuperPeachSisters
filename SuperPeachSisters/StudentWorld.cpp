@@ -23,6 +23,10 @@ int StudentWorld::init()
     string level_file = "level01.txt";
     Level::LoadResult result = lev.loadLevel(level_file);
     
+    
+    
+    
+    
     if (result == Level::load_fail_file_not_found)
         cerr << "Could not find level01.txt data file" << endl;
     else if (result == Level::load_fail_bad_format)
@@ -44,19 +48,19 @@ int StudentWorld::init()
         
         for (int a=0; a<GRID_WIDTH ; a++)
         {
-            for (int b=0; b<GRID_HEIGHT ; a=b++)
+            for (int b=0; b<GRID_HEIGHT ; b++)
             {
                 ge = lev.getContentsOf(a, b);
                 switch (ge)
                     {
                     case Level::empty:
                         {
-                            cout << "Location 5,10 is empty" << endl;
+               //             cout << "Location 5,10 is empty" << endl;
                             break;
                         }
                     case Level::block:
                         {
-                            Block* newBlock = new Block(IID_BLOCK, a, b, 0, 2, 1, this);
+                            Block* newBlock = new Block(IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, 0, 2, 1, this);
 
                             actorVect.push_back(newBlock);
                             break;
@@ -64,18 +68,14 @@ int StudentWorld::init()
                         }
                     case Level::peach:
                         {
-                            Peach* p = new Peach(IID_PEACH, a, b,  0, 0, 1.0, this);
+                            Peach* p = new Peach(IID_PEACH, a*SPRITE_WIDTH, b*SPRITE_HEIGHT,  0, 0, 1.0, this);
                             actorVect.push_back(p);
         
                             break;
                         }
                            
-                            
-            
-                
                     }
            
-                
             }
         }
            
@@ -100,9 +100,11 @@ int StudentWorld::move()
     
 
 
-    decLives();
-    return GWSTATUS_PLAYER_DIED;
+    return GWSTATUS_CONTINUE_GAME;
 }
+
+
+
 
 void StudentWorld::cleanUp()
 {
@@ -112,6 +114,8 @@ void StudentWorld::cleanUp()
     {
         delete (*it);
         it = actorVect.erase(it);
+
+
     }
     
 }

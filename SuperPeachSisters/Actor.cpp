@@ -6,7 +6,7 @@
 Actor::Actor(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw): GraphObject (ID, startX, startY, startDirection, depth, size)
 {
     m_alive=true;
-    
+    myWorld = sw;
     
 }
 
