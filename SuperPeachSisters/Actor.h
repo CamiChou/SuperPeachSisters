@@ -12,7 +12,6 @@ public:
     Actor(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw);
     virtual ~Actor();
     
-    
     virtual void doSomething()=0;
     bool isDamagable();
     bool isAlive();
@@ -38,7 +37,7 @@ private:
 class Peach: public Actor
 {
 public:
-    Peach(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw);
+    Peach(int startX, int startY, StudentWorld* sw);
     ~Peach();
     void doSomething();
     void setInvincible();
@@ -46,9 +45,13 @@ public:
     void bonk();
     
 private:
-    bool m_invincible;
-    std::string m_power;
     bool rechargeStatus;
+    bool tempInvinc;
+    bool hasJump;
+    bool hasStar;
+    bool hasFire;
+    
+    
 };
 
 
@@ -60,7 +63,7 @@ private:
 class Block:public Actor
 {
 public:
-    Block(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw);
+    Block(int startX, int startY, StudentWorld* sw);
     ~Block();
     void doSomething();
     

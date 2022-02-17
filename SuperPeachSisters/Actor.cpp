@@ -36,6 +36,16 @@ StudentWorld* Actor::getWorld()
 
 
 
+Peach::Peach(int startX, int startY, StudentWorld* sw):
+Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
+{
+    tempInvinc=false;
+    hasJump=false;
+    hasStar=false;
+    hasFire=false;
+    
+}
+
 
 
 
@@ -81,12 +91,6 @@ void Peach:: doSomething()
 }
 
 
-Peach::Peach(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw):
-Actor(ID, startX, startY, startDirection, depth, size, sw)
-{
-    
-}
-
 
 
 Peach::~Peach()
@@ -107,8 +111,8 @@ Peach::~Peach()
 
 
 
-Block::Block(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw):
-Actor( ID,  startX,  startY,  startDirection,  depth,  size, sw)
+Block::Block(int startX, int startY, StudentWorld* sw):
+Actor( IID_BLOCK,  startX,  startY,  0,  2,  1, sw)
 {
     
 }

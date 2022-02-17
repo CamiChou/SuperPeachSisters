@@ -16,6 +16,13 @@ StudentWorld::StudentWorld(string assetPath)
 {
 }
 
+
+StudentWorld::~StudentWorld()
+{
+    cleanUp();
+}
+
+
 int StudentWorld::init()
 {
     
@@ -60,7 +67,7 @@ int StudentWorld::init()
                         }
                     case Level::block:
                         {
-                            Block* newBlock = new Block(IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, 0, 2, 1, this);
+                            Block* newBlock = new Block( a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
 
                             actorVect.push_back(newBlock);
                             break;
@@ -68,7 +75,7 @@ int StudentWorld::init()
                         }
                     case Level::peach:
                         {
-                            Peach* p = new Peach(IID_PEACH, a*SPRITE_WIDTH, b*SPRITE_HEIGHT,  0, 0, 1.0, this);
+                            Peach* p = new Peach(a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
                             myPeach=p;
         
                             break;
@@ -119,6 +126,7 @@ void StudentWorld::cleanUp()
 
 
     }
+    delete myPeach;
     
 }
 
