@@ -54,13 +54,21 @@ void Peach:: doSomething()
         case KEY_PRESS_LEFT:
             {
                 setDirection(180);
-                moveTo(getX()-4, getY());
+                
+                
+                if (!getWorld()->overlap(getX()-4, getY()))
+                    moveTo(getX()-4, getY());
                 break;
+                
+                
+                
             }
         case KEY_PRESS_RIGHT:
             {
                 setDirection(0);
-                moveTo(getX()+4, getY());
+                
+                if (!getWorld()->overlap(getX()+4, getY()))
+                    moveTo(getX()+4, getY());
                 break;
             }
         }

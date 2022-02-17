@@ -19,7 +19,7 @@ public:
   virtual int move();
   virtual void cleanUp();
     
-  bool overlap(Actor* other);
+  virtual bool overlap(int xCoord, int yCoord);
     
     
 

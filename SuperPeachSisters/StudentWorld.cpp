@@ -69,7 +69,7 @@ int StudentWorld::init()
                     case Level::peach:
                         {
                             Peach* p = new Peach(IID_PEACH, a*SPRITE_WIDTH, b*SPRITE_HEIGHT,  0, 0, 1.0, this);
-                            actorVect.push_back(p);
+                            myPeach=p;
         
                             break;
                         }
@@ -98,6 +98,8 @@ int StudentWorld::move()
         it++;
     }
     
+    (*myPeach).doSomething();
+    
 
 
     return GWSTATUS_CONTINUE_GAME;
@@ -119,3 +121,36 @@ void StudentWorld::cleanUp()
     }
     
 }
+
+
+
+
+
+bool StudentWorld::overlap(int xCoord, int yCoord)
+{
+    vector<Actor*>::iterator it;
+    it = actorVect.begin();
+    
+    bool isThereOverlap=false;
+    while (it!=actorVect.end())
+    {
+        
+        
+        
+        if (((*it)->getX() + SPRITE_WIDTH-1) <= xCoord || (*it)->getX()>= xCoord + SPRITE_WIDTH-1 ) //-1?
+            it++;
+        
+        else if (((*it)->getY() + SPRITE_HEIGHT-1) <= yCoord || (*it)->getY()>= yCoord + SPRITE_HEIGHT-1 ) //-1?
+            it++;
+        else
+        {
+            isThereOverlap=true;
+            it++;
+        }
+
+
+    }
+    return isThereOverlap;
+    
+}
+
