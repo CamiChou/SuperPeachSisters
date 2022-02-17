@@ -1,8 +1,11 @@
 #include "StudentWorld.h"
 #include "GameConstants.h"
 #include <string>
-#include "Block.h"
 using namespace std;
+
+
+int curr_level=1;
+
 
 GameWorld* createStudentWorld(string assetPath)
 {
@@ -27,7 +30,16 @@ int StudentWorld::init()
 {
     
     Level lev(assetPath());
-    string level_file = "level01.txt";
+    
+    string level_file;
+    if (curr_level==1)
+        level_file = "level01.txt";
+    else if (curr_level==2)
+        level_file = "level02.txt";
+    else if (curr_level==3)
+        level_file = "level03.txt";
+    
+    
     Level::LoadResult result = lev.loadLevel(level_file);
     
     
