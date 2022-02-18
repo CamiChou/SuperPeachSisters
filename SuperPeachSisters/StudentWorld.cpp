@@ -177,9 +177,6 @@ bool StudentWorld::overlap(int xCoord, int yCoord)
     bool isThereOverlap=false;
     while (it!=actorVect.end())
     {
-        
-        
-        
         if (((*it)->getX() + SPRITE_WIDTH-1) <= xCoord || (*it)->getX()>= xCoord + SPRITE_WIDTH-1 ) //-1?
             it++;
         

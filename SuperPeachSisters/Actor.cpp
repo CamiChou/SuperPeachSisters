@@ -9,6 +9,7 @@ GraphObject (ID, startX, startY, startDirection, depth, size)
     m_alive=true;
     myWorld = sw;
     
+    
 }
 
 
@@ -27,10 +28,41 @@ bool Actor:: isAlive()
 
 
 
+
+void Actor:: setDead()
+{
+    m_alive=false;
+}
+
+
+
 StudentWorld* Actor::getWorld()
 {
     return myWorld;
 }
+
+
+
+
+bool Actor:: isBlocking()
+{
+    return false;
+}
+
+
+
+
+bool Actor:: isDamagable()
+{
+    return false;
+}
+
+
+
+
+
+
+
 
 
 
@@ -48,6 +80,22 @@ Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
     
 }
 
+
+
+void Peach:: Bonk()     //IMPLEMENT
+{
+    if (isInvincible())
+        return;
+    else
+    {
+        
+        
+        
+        
+        
+    }
+    
+}
 
 
 
@@ -147,6 +195,14 @@ Pipe(imageID,  startX,  startY, sw )
 
 
 
+void Block:: Bonk()     //IMPLEMENT
+{
+    
+}
+
+
+
+
 
 
 Block::~Block()
@@ -174,6 +230,12 @@ Actor(imageID,  startX,  startY,  0,  2,  1, sw)
 }
 
 
+void Pipe:: Bonk()     //IMPLEMENT
+{
+    
+}
+
+
 
 
 void Pipe:: doSomething()
@@ -187,6 +249,12 @@ Pipe::~Pipe()
     
 }
 
+
+
+bool Pipe:: isBlocking()
+{
+    return true;
+}
 
 
 
@@ -209,6 +277,17 @@ Actor(imageID,  startX,  startY,  0,  1,  1, sw)
 {
     
 }
+
+
+
+void Flag:: Bonk()     //IMPLEMENT
+{
+    
+}
+
+
+
+
 
 
 
@@ -254,12 +333,24 @@ Mario::~Mario()
 }
 
 
+void Mario:: Bonk()     //IMPLEMENT
+{
+    
+}
 
 
 
 
-//END FLAG
+//END MARIO
 
 
 
 
+
+
+
+
+
+
+
+//ENEMIES

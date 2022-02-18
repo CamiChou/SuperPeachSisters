@@ -13,18 +13,20 @@ public:
     virtual ~Actor();
     
     virtual void doSomething()=0;
-    bool isDamagable();
     bool isAlive();
+    void setDead();
     int returnHitPoints();
-    bool isBlocking();
     bool isBonkable();
-    StudentWorld* getWorld(); 
+    StudentWorld* getWorld();
     
+    virtual void Bonk()=0;
+    virtual bool isBlocking();
+    virtual bool isDamagable();
     
 private:
     bool m_alive;
     int m_hitPoints;
-    int m_hp;
+    int m_hp;    
     StudentWorld* myWorld;
     
     
@@ -42,7 +44,10 @@ public:
     void doSomething();
     void setInvincible();
     bool isInvincible();
-    void bonk();
+    void Bonk();
+    
+    
+    
     
 private:
     bool rechargeStatus;
@@ -69,6 +74,8 @@ public:
     Pipe(int imageID, int startX, int startY, StudentWorld* sw);
     ~Pipe();
     void doSomething();
+    bool isBlocking();
+    void Bonk();
     
     
     
@@ -88,7 +95,7 @@ public:
     Block( int imageID, int startX, int startY, StudentWorld* sw);
     ~Block();
     void doSomething();
-    
+    void Bonk();
     
     
     
@@ -111,7 +118,7 @@ public:
     Flag(int imageID, int startX, int startY, StudentWorld* sw);
     ~Flag();
     void doSomething();
-    
+    void Bonk();
     
 private:
     
@@ -125,6 +132,9 @@ public:
     Mario(int imageID, int startX, int startY, StudentWorld* sw);
     ~Mario();
     void doSomething();
+    void Bonk();
+    
+    
     
 private:
     
@@ -135,6 +145,22 @@ private:
 
 
 
+
+class Enemies: public Actor
+{
+public:
+    Enemies(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Enemies();
+    void doSomething();
+    void Bonk();
+    
+private:
+    
+    
+    
+    
+    
+};
 
 
 
