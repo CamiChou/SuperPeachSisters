@@ -3,7 +3,8 @@
 
 
 
-Actor::Actor(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw): GraphObject (ID, startX, startY, startDirection, depth, size)
+Actor::Actor(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw):
+GraphObject (ID, startX, startY, startDirection, depth, size)
 {
     m_alive=true;
     myWorld = sw;
@@ -37,6 +38,7 @@ StudentWorld* Actor::getWorld()
 
 
 Peach::Peach(int startX, int startY, StudentWorld* sw):
+
 Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
 {
     tempInvinc=false;
@@ -81,6 +83,30 @@ void Peach:: doSomething()
                     moveTo(getX()+4, getY());
                 break;
             }
+                
+                
+                
+            
+        case KEY_PRESS_UP:
+            {
+                if (!getWorld()->overlap(getX(), getY()+4))
+                    moveTo(getX(), getY()+4);
+                break;
+                
+            }
+                
+                
+        case KEY_PRESS_DOWN:
+            {
+                if (!getWorld()->overlap(getX(), getY()-4))
+                    moveTo(getX(), getY()-4);
+                break;
+                
+            }
+                
+                
+            
+                
         }
     
     }
@@ -109,10 +135,12 @@ Peach::~Peach()
 
 
 
+//BLOCK
 
+Block::Block(int imageID, int startX, int startY, StudentWorld* sw):
 
-Block::Block(int startX, int startY, StudentWorld* sw):
-Actor( IID_BLOCK,  startX,  startY,  0,  2,  1, sw)
+Pipe(imageID,  startX,  startY, sw )
+
 {
     
 }
@@ -133,3 +161,105 @@ void Block::doSomething()
 {
     
 }
+
+
+
+//PIPE
+
+
+Pipe::Pipe(int imageID, int startX, int startY, StudentWorld* sw):
+Actor(imageID,  startX,  startY,  0,  2,  1, sw)
+{
+    
+}
+
+
+
+
+void Pipe:: doSomething()
+{
+    
+}
+
+
+Pipe::~Pipe()
+{
+    
+}
+
+
+
+
+
+
+
+
+
+
+//END BLOCK
+
+
+
+
+
+
+//FLAG
+Flag::Flag(int imageID, int startX, int startY, StudentWorld* sw):
+Actor(imageID,  startX,  startY,  0,  1,  1, sw)
+{
+    
+}
+
+
+
+void Flag:: doSomething()
+{
+    
+}
+
+
+Flag::~Flag()
+{
+    
+}
+
+
+
+
+
+
+//END FLAG
+
+
+
+
+//Mario
+Mario::Mario(int imageID, int startX, int startY, StudentWorld* sw):
+Flag(imageID,  startX,  startY, sw)
+{
+    
+}
+
+
+
+void Mario:: doSomething()
+{
+    
+}
+
+
+Mario::~Mario()
+{
+    
+}
+
+
+
+
+
+
+//END FLAG
+
+
+
+

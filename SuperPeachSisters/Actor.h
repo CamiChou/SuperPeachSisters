@@ -60,10 +60,32 @@ private:
 
 
 
-class Block:public Actor
+
+
+
+class Pipe:public Actor
 {
 public:
-    Block(int startX, int startY, StudentWorld* sw);
+    Pipe(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Pipe();
+    void doSomething();
+    
+    
+    
+private:
+  
+    
+    
+    
+    
+};
+
+
+
+class Block:public Pipe
+{
+public:
+    Block( int imageID, int startX, int startY, StudentWorld* sw);
     ~Block();
     void doSomething();
     
@@ -77,6 +99,45 @@ private:
     
     
 };
+
+
+
+
+
+
+class Flag:public Actor
+{
+public:
+    Flag(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Flag();
+    void doSomething();
+    
+    
+private:
+    
+};
+
+
+
+class Mario: public Flag
+{
+public:
+    Mario(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Mario();
+    void doSomething();
+    
+private:
+    
+    
+    
+    
+};
+
+
+
+
+
+
 
 
 

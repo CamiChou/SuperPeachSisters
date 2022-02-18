@@ -4,7 +4,7 @@
 using namespace std;
 
 
-int curr_level=1;
+int curr_level=3;
 
 
 GameWorld* createStudentWorld(string assetPath)
@@ -79,7 +79,7 @@ int StudentWorld::init()
                         }
                     case Level::block:
                         {
-                            Block* newBlock = new Block( a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
+                            Block* newBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
 
                             actorVect.push_back(newBlock);
                             break;
@@ -90,6 +90,29 @@ int StudentWorld::init()
                             Peach* p = new Peach(a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
                             myPeach=p;
         
+                            break;
+                        }
+                            
+                            
+                        case Level::pipe:
+                        {
+                            Pipe* newPipe= new Pipe(IID_PIPE,a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this );
+                            actorVect.push_back(newPipe);
+                            break;
+                        }
+                            
+                        case Level:: flag:
+                        {
+                            Flag* newFlag= new Flag(IID_FLAG,a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this );
+                            actorVect.push_back(newFlag);
+                            break;
+                            
+                        }
+                            
+                        case Level:: mario:
+                        {
+                            Mario* m_Mario= new Mario(IID_MARIO, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this );
+                            actorVect.push_back(m_Mario);
                             break;
                         }
                            
