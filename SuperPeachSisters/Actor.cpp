@@ -8,9 +8,9 @@ GraphObject (ID, startX, startY, startDirection, depth, size)
 {
     m_alive=true;
     myWorld = sw;
-    
-    
+        
 }
+
 
 
 
@@ -25,7 +25,34 @@ bool Actor:: isAlive()
 }
 
 
+bool Actor::overlap(int xCoord, int yCoord)
+{
+    if ((getX() + SPRITE_WIDTH-1) < xCoord || getX()> xCoord + SPRITE_WIDTH-1 )
+        return false;
+    
+    else if ((getY() + SPRITE_HEIGHT-1) < yCoord || (getY()> yCoord + SPRITE_HEIGHT-1 )) //-1?
+        return false;
+    else
+        return true;
+}
 
+
+
+
+
+
+
+
+bool Actor:: isEnemy()
+{
+    return false;
+}
+
+
+void Actor::decreaseHP()
+{
+    m_hitPoints--;
+}
 
 
 
@@ -44,7 +71,7 @@ StudentWorld* Actor::getWorld()
 
 
 
-bool Actor:: isBlocking()
+bool Actor:: blockable()
 {
     return false;
 }
@@ -69,42 +96,68 @@ bool Actor:: isDamagable()
 
 
 
-Peach::Peach(int startX, int startY, StudentWorld* sw):
 
+
+
+Peach::Peach(int startX, int startY, StudentWorld* sw):
 Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
 {
     tempInvinc=false;
     hasJump=false;
     hasStar=false;
     hasFire=false;
-    
+    remaining_jump_distance=0;
 }
 
 
 
-void Peach:: Bonk()     //IMPLEMENT
+
+
+
+void Peach:: Bonk(Actor* bonker)     //IMPLEMENT
 {
-    if (isInvincible())
-        return;
-    else
-    {
-        
-        
-        
-        
-        
-    }
+    decreaseHP();
     
+
 }
 
 
-
+bool Peach:: isDamagable()
+{
+    return true;
+}
 
 
 void Peach:: doSomething()
 {
     if (!isAlive())
         return;
+    
+    
+    if (isJumping==true && remaining_jump_distance>0)
+    {
+        if (!getWorld()->isBlocking(getX(), getY()+4))
+        {
+            moveTo(getX(), getY()+4);
+            remaining_jump_distance-=1;
+        }
+        else
+        {
+            remaining_jump_distance=0;
+            isJumping=false;
+        }
+    }
+    
+    else if (!getWorld()->isBlocking(getX(), getY()-2)||!getWorld()->isBlocking(getX(), getY()-1||!getWorld()->isBlocking(getX(), getY()-3)))
+    {
+        moveTo(getX(), getY()-4);
+        
+    }
+                                                                                                
+    
+    
+    
+    
     
     int ch;
     if (getWorld()->getKey(ch))
@@ -116,29 +169,36 @@ void Peach:: doSomething()
                 setDirection(180);
                 
                 
-                if (!getWorld()->overlap(getX()-4, getY()))
+                if (!getWorld()->isBlocking(getX()-4, getY()))
                     moveTo(getX()-4, getY());
                 break;
-                
-                
-                
             }
         case KEY_PRESS_RIGHT:
             {
                 setDirection(0);
                 
-                if (!getWorld()->overlap(getX()+4, getY()))
+                if (!getWorld()->isBlocking(getX()+4, getY()))
                     moveTo(getX()+4, getY());
                 break;
             }
                 
                 
-                
             
         case KEY_PRESS_UP:
             {
-                if (!getWorld()->overlap(getX(), getY()+4))
-                    moveTo(getX(), getY()+4);
+                getWorld()->playSound(SOUND_PLAYER_JUMP);
+                isJumping=true;
+                
+                if (getWorld()->isBlocking(getX(), getY()-1))
+                {
+                    if (hasJump==true)
+                        remaining_jump_distance=12;
+                    else
+                        remaining_jump_distance=8;
+                }
+                
+//                if (!getWorld()->isBlocking(getX(), getY()+4))
+//                    moveTo(getX(), getY()+4);
                 break;
                 
             }
@@ -146,7 +206,7 @@ void Peach:: doSomething()
                 
         case KEY_PRESS_DOWN:
             {
-                if (!getWorld()->overlap(getX(), getY()-4))
+                if (!getWorld()->isBlocking(getX(), getY()-4))
                     moveTo(getX(), getY()-4);
                 break;
                 
@@ -186,31 +246,23 @@ Peach::~Peach()
 //BLOCK
 
 Block::Block(int imageID, int startX, int startY, StudentWorld* sw):
-
-Pipe(imageID,  startX,  startY, sw )
-
+Pipe(imageID,  startX,  startY, sw)
 {
     
 }
 
 
 
-void Block:: Bonk()     //IMPLEMENT
+void Block:: Bonk(Actor* bonker)     //IMPLEMENT
 {
     
 }
-
-
-
-
 
 
 Block::~Block()
 {
     
 }
-
-
 
 
 void Block::doSomething()
@@ -221,8 +273,6 @@ void Block::doSomething()
 
 
 //PIPE
-
-
 Pipe::Pipe(int imageID, int startX, int startY, StudentWorld* sw):
 Actor(imageID,  startX,  startY,  0,  2,  1, sw)
 {
@@ -230,11 +280,10 @@ Actor(imageID,  startX,  startY,  0,  2,  1, sw)
 }
 
 
-void Pipe:: Bonk()     //IMPLEMENT
+void Pipe:: Bonk(Actor* bonker)     //IMPLEMENT
 {
     
 }
-
 
 
 
@@ -251,14 +300,10 @@ Pipe::~Pipe()
 
 
 
-bool Pipe:: isBlocking()
+bool Pipe:: blockable()
 {
     return true;
 }
-
-
-
-
 
 
 
@@ -280,8 +325,12 @@ Actor(imageID,  startX,  startY,  0,  1,  1, sw)
 
 
 
-void Flag:: Bonk()     //IMPLEMENT
+void Flag:: Bonk(Actor* bonker)     //IMPLEMENT
 {
+    
+    
+    
+    setDead();
     
 }
 
@@ -333,7 +382,7 @@ Mario::~Mario()
 }
 
 
-void Mario:: Bonk()     //IMPLEMENT
+void Mario:: Bonk(Actor* bonker)     //IMPLEMENT
 {
     
 }
@@ -353,4 +402,120 @@ void Mario:: Bonk()     //IMPLEMENT
 
 
 
+
+
+
+
+
 //ENEMIES
+
+
+
+
+
+Enemies::Enemies(int imageID, int startX, int startY, StudentWorld* sw)
+: Actor(imageID, startX, startY, 180* (rand()%2), 1, 1, sw)
+{
+    
+}
+
+
+Enemies::~Enemies()
+{
+    
+}
+
+
+void Enemies::Bonk(Actor* bonker)
+{
+    
+    
+}
+
+
+
+
+void Enemies::changeDirection()
+{
+    if (getDirection()==0)
+        setDirection(180);
+    else if (getDirection()==180)
+        setDirection(0);
+}
+
+
+
+
+void Enemies::doSomething()
+{
+    if (!isAlive())
+        return;
+    
+    
+    
+    
+    
+    
+    if (getDirection()==0)
+    {
+        if (!getWorld()->isBlocking(getX()+1, getY()))
+            moveTo(getX()+1, getY());
+        else
+        {
+            changeDirection();
+        }
+    }
+    else if (getDirection()==180)
+    {
+        if (!getWorld()->isBlocking(getX()-1, getY()))
+            moveTo(getX()-1, getY());
+        else
+        {
+            changeDirection();
+        }
+    }
+}
+
+
+bool Enemies::isEnemy()
+{
+    return true;
+}
+
+
+
+
+//GOOMBA
+
+
+Goomba::Goomba(int imageID, int startX, int startY, StudentWorld* sw):
+Enemies(imageID, startX, startY, sw)
+{
+    
+}
+
+
+Goomba::~Goomba()
+{
+    
+}
+
+
+
+
+
+//KOOPA
+
+Koopa::Koopa(int imageID, int startX, int startY, StudentWorld* sw):
+Enemies(imageID, startX, startY, sw)
+{
+    
+}
+
+Koopa::~Koopa()
+{
+    
+}
+
+
+

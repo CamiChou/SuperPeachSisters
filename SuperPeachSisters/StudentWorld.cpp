@@ -28,6 +28,7 @@ StudentWorld::~StudentWorld()
 
 int StudentWorld::init()
 {
+
     
     Level lev(assetPath());
     
@@ -62,9 +63,6 @@ int StudentWorld::init()
         Level::GridEntry ge;
         
         
-        
-        
-        
         for (int a=0; a<GRID_WIDTH ; a++)
         {
             for (int b=0; b<GRID_HEIGHT ; b++)
@@ -74,22 +72,19 @@ int StudentWorld::init()
                     {
                     case Level::empty:
                         {
-               //             cout << "Location 5,10 is empty" << endl;
+               //           cout << "Location 5,10 is empty" << endl;
                             break;
                         }
                     case Level::block:
                         {
                             Block* newBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
-
                             actorVect.push_back(newBlock);
                             break;
-                            
                         }
                     case Level::peach:
                         {
                             Peach* p = new Peach(a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
                             myPeach=p;
-        
                             break;
                         }
                             
@@ -115,7 +110,20 @@ int StudentWorld::init()
                             actorVect.push_back(m_Mario);
                             break;
                         }
-                           
+                            
+                        case Level:: goomba:
+                        {
+                            Goomba* newGoomba = new Goomba(IID_GOOMBA, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
+                            actorVect.push_back(newGoomba);
+                            break;
+                        }
+                            
+                        case Level::koopa:
+                        {
+                            Koopa* newKoopa = new Koopa(IID_KOOPA, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
+                            actorVect.push_back(newKoopa);
+                            break;
+                        }
                     }
            
             }
@@ -158,39 +166,49 @@ void StudentWorld::cleanUp()
     {
         delete (*it);
         it = actorVect.erase(it);
-
-
     }
     delete myPeach;
-    
 }
 
 
 
 
 
-bool StudentWorld::overlap(int xCoord, int yCoord)
+
+
+
+
+
+
+bool StudentWorld::isBlocking(int xCoord, int yCoord)
 {
     vector<Actor*>::iterator it;
     it = actorVect.begin();
-    
-    bool isThereOverlap=false;
+    bool m = false;
     while (it!=actorVect.end())
     {
-        if (((*it)->getX() + SPRITE_WIDTH-1) <= xCoord || (*it)->getX()>= xCoord + SPRITE_WIDTH-1 ) //-1?
-            it++;
-        
-        else if (((*it)->getY() + SPRITE_HEIGHT-1) <= yCoord || (*it)->getY()>= yCoord + SPRITE_HEIGHT-1 ) //-1?
-            it++;
-        else
+        if ((*it)->blockable() && (*it)->overlap(xCoord, yCoord))
         {
-            isThereOverlap=true;
+            m=true;
             it++;
         }
-
-
+        else
+            it++;
     }
-    return isThereOverlap;
-    
+    return m;
 }
+
+
+bool StudentWorld:: doesIntersectPeach(int xCoord, int yCoord)
+{
+    if (myPeach->overlap(xCoord, yCoord))
+        return true;
+    return false;
+}
+
+
+
+
+
+
 

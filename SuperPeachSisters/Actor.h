@@ -11,28 +11,30 @@ class Actor: public GraphObject
 public:
     Actor(int ID, int startX, int startY, int startDirection, int depth, double size, StudentWorld* sw);
     virtual ~Actor();
-    
     virtual void doSomething()=0;
     bool isAlive();
     void setDead();
     int returnHitPoints();
-    bool isBonkable();
     StudentWorld* getWorld();
-    
-    virtual void Bonk()=0;
-    virtual bool isBlocking();
+    virtual void Bonk(Actor* bonker)=0;
+    virtual bool blockable();
     virtual bool isDamagable();
-    
+    virtual bool isEnemy();
+    void decreaseHP();
+    bool overlap(int xCoord, int yCoord);
+    void bonkAllBonkables(int xCoord, int yCoord);
+
 private:
     bool m_alive;
     int m_hitPoints;
-    int m_hp;    
     StudentWorld* myWorld;
     
-    
-    
-    
 };
+
+
+
+
+
 
 
 
@@ -44,7 +46,10 @@ public:
     void doSomething();
     void setInvincible();
     bool isInvincible();
-    void Bonk();
+    bool isDamagable();
+    virtual void Bonk(Actor* bonker);
+    void jump();
+    void setJumpDistance();
     
     
     
@@ -55,7 +60,8 @@ private:
     bool hasJump;
     bool hasStar;
     bool hasFire;
-    
+    int remaining_jump_distance;
+    bool isJumping;
     
 };
 
@@ -74,15 +80,13 @@ public:
     Pipe(int imageID, int startX, int startY, StudentWorld* sw);
     ~Pipe();
     void doSomething();
-    bool isBlocking();
-    void Bonk();
+    bool blockable();
+    void Bonk(Actor* bonker);
     
     
     
 private:
-  
-    
-    
+      
     
     
 };
@@ -92,12 +96,10 @@ private:
 class Block:public Pipe
 {
 public:
-    Block( int imageID, int startX, int startY, StudentWorld* sw);
+    Block(int imageID, int startX, int startY, StudentWorld* sw);
     ~Block();
     void doSomething();
-    void Bonk();
-    
-    
+    void Bonk(Actor* bonker);
     
 private:
     
@@ -118,7 +120,7 @@ public:
     Flag(int imageID, int startX, int startY, StudentWorld* sw);
     ~Flag();
     void doSomething();
-    void Bonk();
+    void Bonk(Actor* bonker);
     
 private:
     
@@ -132,7 +134,7 @@ public:
     Mario(int imageID, int startX, int startY, StudentWorld* sw);
     ~Mario();
     void doSomething();
-    void Bonk();
+    void Bonk(Actor* bonker);
     
     
     
@@ -152,12 +154,12 @@ public:
     Enemies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Enemies();
     void doSomething();
-    void Bonk();
+    void Bonk(Actor* bonker);
+    bool isEnemy();
+    void changeDirection();
+    
     
 private:
-    
-    
-    
     
     
 };
@@ -165,6 +167,24 @@ private:
 
 
 
+
+class Goomba: public Enemies
+{
+public:
+    Goomba (int imageID, int startX, int startY, StudentWorld* sw);
+    ~Goomba();
+ 
+};
+
+
+
+class Koopa: public Enemies
+{
+public:
+    Koopa (int imageID, int startX, int startY, StudentWorld* sw);
+    ~Koopa();
+    
+};
 
 
 

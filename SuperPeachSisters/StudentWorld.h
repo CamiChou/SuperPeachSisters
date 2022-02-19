@@ -16,12 +16,13 @@ class StudentWorld : public GameWorld
 {
 public:
   StudentWorld(std::string assetPath);
-    ~StudentWorld();
+  ~StudentWorld();
   virtual int init();
   virtual int move();
   virtual void cleanUp();
+  bool isBlocking(int xCoord, int yCoord);
+  bool doesIntersectPeach(int xCoord, int YCoord); 
     
-  virtual bool overlap(int xCoord, int yCoord);
     
     
 
@@ -30,11 +31,6 @@ private:
     std::vector<Actor*> actorVect;
     
 };
-
-
-
-
-
 
 
 
