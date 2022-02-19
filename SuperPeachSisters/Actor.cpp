@@ -188,7 +188,6 @@ void Peach:: doSomething()
             {
                 getWorld()->playSound(SOUND_PLAYER_JUMP);
                 isJumping=true;
-                
                 if (getWorld()->isBlocking(getX(), getY()-1))
                 {
                     if (hasJump==true)
@@ -196,11 +195,7 @@ void Peach:: doSomething()
                     else
                         remaining_jump_distance=8;
                 }
-                
-//                if (!getWorld()->isBlocking(getX(), getY()+4))
-//                    moveTo(getX(), getY()+4);
                 break;
-                
             }
                 
                 
@@ -458,7 +453,7 @@ void Enemies::doSomething()
     
     if (getDirection()==0)
     {
-        if (!getWorld()->isBlocking(getX()+1, getY()))
+        if (!getWorld()->isBlocking(getX()+1, getY()) && getWorld()->isBlocking(getX()+SPRITE_WIDTH+1, getY()-1))
             moveTo(getX()+1, getY());
         else
         {
@@ -467,12 +462,10 @@ void Enemies::doSomething()
     }
     else if (getDirection()==180)
     {
-        if (!getWorld()->isBlocking(getX()-1, getY()))
+        if (!getWorld()->isBlocking(getX()-1, getY()) && getWorld()->isBlocking(getX()-1, getY()-1))
             moveTo(getX()-1, getY());
         else
-        {
             changeDirection();
-        }
     }
 }
 
