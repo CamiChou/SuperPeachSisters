@@ -77,10 +77,32 @@ int StudentWorld::init()
                         }
                     case Level::block:
                         {
-                            Block* newBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
+                            Block* newBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this, false, false, false);
                             actorVect.push_back(newBlock);
                             break;
                         }
+                        case Level::star_goodie_block:
+                        {
+                            Block* newStarBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this, true, false, false);
+                            actorVect.push_back(newStarBlock);
+                            break;
+                        }
+                            
+                           
+                        case Level::mushroom_goodie_block:
+                        {
+                            Block* newMushBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this, false, true, false);
+                            actorVect.push_back(newMushBlock);
+                            break;
+                        }
+                        
+                        case Level::flower_goodie_block:
+                        {
+                            Block* flowerBlock = new Block( IID_BLOCK, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this, false, false, true);
+                            actorVect.push_back(flowerBlock);
+                            break;
+                        }
+                            
                     case Level::peach:
                         {
                             Peach* p = new Peach(a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
@@ -212,3 +234,23 @@ bool StudentWorld:: doesIntersectPeach(int xCoord, int yCoord)
 
 
 
+void StudentWorld:: setJump()
+{
+    myPeach->activateMushroom();
+}
+void StudentWorld:: setStar(int ticks)
+{
+    myPeach->activateStar(ticks);
+}
+void StudentWorld:: setFire()
+{
+    myPeach->activateFlower();
+    
+}
+
+
+
+void StudentWorld:: setPeachHP(int num)
+{
+    myPeach->setHP(num);
+}

@@ -20,14 +20,15 @@ public:
     virtual bool blockable();
     virtual bool isDamagable();
     virtual bool isEnemy();
-    void decreaseHP();
     bool overlap(int xCoord, int yCoord);
     void bonkAllBonkables(int xCoord, int yCoord);
+    void changeDirection();
+
 
 private:
     bool m_alive;
-    int m_hitPoints;
     StudentWorld* myWorld;
+    
     
 };
 
@@ -48,8 +49,15 @@ public:
     bool isInvincible();
     bool isDamagable();
     virtual void Bonk(Actor* bonker);
-    void jump();
     void setJumpDistance();
+    
+    
+    void activateMushroom();
+    void activateStar(int numTicks);
+    void activateFlower();
+    void setHP(int num);
+    void decreaseHP();
+
     
     
     
@@ -59,9 +67,11 @@ private:
     bool tempInvinc;
     bool hasJump;
     bool hasStar;
-    bool hasFire;
+    bool hasFlower;
     int remaining_jump_distance;
     bool isJumping;
+    int m_hitPoints;
+    int starPowerTicks;
     
 };
 
@@ -96,13 +106,15 @@ private:
 class Block:public Pipe
 {
 public:
-    Block(int imageID, int startX, int startY, StudentWorld* sw);
+    Block(int imageID, int startX, int startY, StudentWorld* sw, bool star, bool mush, bool flower);
     ~Block();
     void doSomething();
     void Bonk(Actor* bonker);
     
 private:
-    
+    bool hasStar;
+    bool hasMushroom;
+    bool hasFlower;
     
     
     
@@ -156,7 +168,6 @@ public:
     void doSomething();
     void Bonk(Actor* bonker);
     bool isEnemy();
-    void changeDirection();
     
     
 private:
@@ -187,6 +198,52 @@ public:
 };
 
 
+
+class Goodies: public Actor
+{
+public:
+    Goodies(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Goodies();
+    void doSomething();    
+    
+    
+};
+
+
+
+
+
+
+class Star: public Goodies
+{
+public:
+    Star(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Star();
+    void doSomething();
+    
+};
+
+
+
+class Flower: public Goodies
+{
+public:
+    Flower(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Flower();
+    void doSomething();
+    
+};
+
+
+
+
+class Mushroom: public Goodies
+{
+public:
+    Mushroom(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Mushroom();
+    void doSomething();
+};
 
 
 

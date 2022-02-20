@@ -21,7 +21,13 @@ public:
   virtual int move();
   virtual void cleanUp();
   bool isBlocking(int xCoord, int yCoord);
-  bool doesIntersectPeach(int xCoord, int YCoord); 
+  bool doesIntersectPeach(int xCoord, int YCoord);
+    
+  void setJump();
+  void setStar(int numTicks);
+  void setFire();
+    
+  void setPeachHP(int num);
     
     
     

@@ -11,12 +11,19 @@ GraphObject (ID, startX, startY, startDirection, depth, size)
         
 }
 
-
-
-
-
-
 Actor:: ~Actor() {}
+
+
+
+
+void Actor::changeDirection()
+{
+    if (getDirection()==0)
+        setDirection(180);
+    else if (getDirection()==180)
+        setDirection(0);
+}
+
 
 
 bool Actor:: isAlive()
@@ -46,12 +53,6 @@ bool Actor::overlap(int xCoord, int yCoord)
 bool Actor:: isEnemy()
 {
     return false;
-}
-
-
-void Actor::decreaseHP()
-{
-    m_hitPoints--;
 }
 
 
@@ -105,8 +106,17 @@ Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
     tempInvinc=false;
     hasJump=false;
     hasStar=false;
-    hasFire=false;
+    hasFlower=false;
     remaining_jump_distance=0;
+    
+}
+
+
+
+
+void Peach::decreaseHP()
+{
+    m_hitPoints--;
 }
 
 
@@ -126,6 +136,30 @@ bool Peach:: isDamagable()
 {
     return true;
 }
+
+
+
+
+void Peach:: activateMushroom()
+{
+    hasJump=true;
+}
+void Peach::activateStar(int ticks)
+{
+    starPowerTicks=150;
+    hasStar=true;
+}
+void Peach::activateFlower()
+{
+    hasFlower=true;
+}
+
+
+
+
+
+
+
 
 
 void Peach:: doSomething()
@@ -154,6 +188,11 @@ void Peach:: doSomething()
         
     }
                                                                                                 
+    
+    
+    
+    
+    
     
     
     
@@ -198,7 +237,6 @@ void Peach:: doSomething()
                 break;
             }
                 
-                
         case KEY_PRESS_DOWN:
             {
                 if (!getWorld()->isBlocking(getX(), getY()-4))
@@ -217,6 +255,12 @@ void Peach:: doSomething()
     
     
     
+}
+
+
+void Peach:: setHP(int num)
+{
+    m_hitPoints=num;
 }
 
 
@@ -240,9 +284,12 @@ Peach::~Peach()
 
 //BLOCK
 
-Block::Block(int imageID, int startX, int startY, StudentWorld* sw):
+Block::Block(int imageID, int startX, int startY, StudentWorld* sw, bool star, bool mush, bool flower):
 Pipe(imageID,  startX,  startY, sw)
 {
+    hasStar=star;
+    hasMushroom=mush;
+    hasFlower=flower;
     
 }
 
@@ -250,7 +297,7 @@ Pipe(imageID,  startX,  startY, sw)
 
 void Block:: Bonk(Actor* bonker)     //IMPLEMENT
 {
-    
+    //MAKE GOODIES    
 }
 
 
@@ -264,6 +311,7 @@ void Block::doSomething()
 {
     
 }
+
 
 
 
@@ -430,15 +478,6 @@ void Enemies::Bonk(Actor* bonker)
 
 
 
-void Enemies::changeDirection()
-{
-    if (getDirection()==0)
-        setDirection(180);
-    else if (getDirection()==180)
-        setDirection(0);
-}
-
-
 
 
 void Enemies::doSomething()
@@ -512,3 +551,120 @@ Koopa::~Koopa()
 
 
 
+
+
+
+//GOODIES
+
+Goodies::Goodies(int imageID, int startX, int startY, StudentWorld* sw)
+: Actor(imageID, startX, startY, 0, 1, 1, sw)
+{
+    
+    
+    
+}
+
+Goodies::~Goodies()
+{
+    
+}
+
+void Goodies::doSomething()
+{
+    if (getWorld()->doesIntersectPeach(getX(), getY()))
+    {
+        setDead();
+        getWorld()->playSound(SOUND_PLAYER_POWERUP);
+        return;
+    }
+    else
+    {
+        if (!getWorld()->isBlocking(getX(), getY()-2))
+            moveTo(getX(), getY()-2);
+        
+        else
+        {
+            if (getDirection()==0)
+            {
+                if (!getWorld()->isBlocking(getX()+2, getY()) && getWorld()->isBlocking(getX()+SPRITE_WIDTH+2, getY()-1))
+                    moveTo(getX()+1, getY());
+                else
+                {
+                    changeDirection();
+                }
+            }
+            else if (getDirection()==180)
+            {
+                if (!getWorld()->isBlocking(getX()-2, getY()) && getWorld()->isBlocking(getX()-2, getY()-1))
+                    moveTo(getX()-2, getY());
+                else
+                    changeDirection();
+            }
+        }
+    }
+    
+}
+
+
+
+
+
+//STAR
+
+
+
+Star:: Star(int imageID, int startX, int startY, StudentWorld* sw) :Goodies(imageID, startX, startY, sw){}
+
+
+Star::~Star(){};
+
+
+void Star::doSomething()
+{
+    Goodies::doSomething();
+    getWorld()->increaseScore(100);
+    getWorld()->setStar(150);
+}
+
+
+
+
+//FLOWER
+
+Flower::Flower(int imageID, int startX, int startY, StudentWorld* sw)
+:Goodies(imageID, startX, startY, sw)
+{
+    
+}
+
+Flower::~Flower(){};
+
+
+void Flower:: doSomething()
+{
+    Goodies::doSomething();
+    getWorld()->increaseScore(50);
+    getWorld()->setFire();
+    getWorld()->setPeachHP(2);
+}
+
+
+
+
+//MUSHROOM
+
+
+Mushroom::Mushroom(int imageID, int startX, int startY, StudentWorld* sw)
+:Goodies(imageID, startX, startY, sw)
+{}
+
+
+Mushroom::~Mushroom(){};
+
+void Mushroom:: doSomething()
+{
+    Goodies::doSomething();
+    getWorld()->increaseScore(75);
+    getWorld()->setJump();
+    getWorld()->setPeachHP(2);
+}
