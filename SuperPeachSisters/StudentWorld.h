@@ -27,9 +27,12 @@ public:
   void setStar(int numTicks);
   void setFire();
     
+    
+  void bonkAllBonkables(int x, int y);
+    
   void setPeachHP(int num);
-    
-    
+  void addObject(Actor* a);
+  void removeDead();
     
 
 private:

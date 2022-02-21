@@ -49,7 +49,6 @@ bool Actor::overlap(int xCoord, int yCoord)
 
 
 
-
 bool Actor:: isEnemy()
 {
     return false;
@@ -177,6 +176,7 @@ void Peach:: doSomething()
         }
         else
         {
+            getWorld()->bonkAllBonkables(getX(), getY()+4);
             remaining_jump_distance=0;
             isJumping=false;
         }
@@ -185,10 +185,10 @@ void Peach:: doSomething()
     else if (!getWorld()->isBlocking(getX(), getY()-2)||!getWorld()->isBlocking(getX(), getY()-1||!getWorld()->isBlocking(getX(), getY()-3)))
     {
         moveTo(getX(), getY()-4);
-        
     }
                                                                                                 
-    
+    if (overlap(getX(), getY()))
+        getWorld()->bonkAllBonkables(getX(), getY());
     
     
     
@@ -210,6 +210,8 @@ void Peach:: doSomething()
                 
                 if (!getWorld()->isBlocking(getX()-4, getY()))
                     moveTo(getX()-4, getY());
+                else
+                    getWorld()-> bonkAllBonkables(getX()-4, getY());
                 break;
             }
         case KEY_PRESS_RIGHT:
@@ -218,6 +220,8 @@ void Peach:: doSomething()
                 
                 if (!getWorld()->isBlocking(getX()+4, getY()))
                     moveTo(getX()+4, getY());
+                else
+                    getWorld()-> bonkAllBonkables(getX()+4, getY()); 
                 break;
             }
                 
@@ -297,7 +301,32 @@ Pipe(imageID,  startX,  startY, sw)
 
 void Block:: Bonk(Actor* bonker)     //IMPLEMENT
 {
-    //MAKE GOODIES    
+    if (hasStar==false && hasFlower==false && hasMushroom==false)
+        getWorld()->playSound(SOUND_PLAYER_BONK);
+    else
+    {
+        getWorld()->playSound(SOUND_POWERUP_APPEARS);
+        if (hasStar)
+        {
+            Star* s = new Star(IID_STAR, getX(), getY()+SPRITE_HEIGHT+8, getWorld());
+            getWorld()->addObject(s);
+        }
+            
+        if (hasFlower)
+        {
+            Flower* f = new Flower(IID_FLOWER, getX(), getY()+ SPRITE_HEIGHT+8, getWorld());
+            getWorld()->addObject(f);
+        }
+        if (hasMushroom)
+        {
+            Mushroom* m = new Mushroom(IID_MUSHROOM, getX(),getY()+ SPRITE_HEIGHT+8, getWorld());
+            getWorld()->addObject(m);
+        }
+            
+            
+    }
+    
+    
 }
 
 
@@ -307,10 +336,7 @@ Block::~Block()
 }
 
 
-void Block::doSomething()
-{
-    
-}
+void Block::doSomething() {}
 
 
 
@@ -352,7 +378,7 @@ bool Pipe:: blockable()
 
 
 
-//END BLOCK
+//END PIPE
 
 
 
@@ -501,7 +527,7 @@ void Enemies::doSomething()
     }
     else if (getDirection()==180)
     {
-        if (!getWorld()->isBlocking(getX()-1, getY()) && getWorld()->isBlocking(getX()-1, getY()-1))
+        if (!getWorld()->isBlocking(getX()-1, getY()) && getWorld()->isBlocking(getX()-SPRITE_WIDTH-1, getY()-1))
             moveTo(getX()-1, getY());
         else
             changeDirection();
@@ -582,30 +608,33 @@ void Goodies::doSomething()
         if (!getWorld()->isBlocking(getX(), getY()-2))
             moveTo(getX(), getY()-2);
         
-        else
+        
+        if (getDirection()==0)
         {
-            if (getDirection()==0)
+            if (!getWorld()->isBlocking(getX()+2, getY()))
+                moveTo(getX()+2, getY());
+            else
             {
-                if (!getWorld()->isBlocking(getX()+2, getY()) && getWorld()->isBlocking(getX()+SPRITE_WIDTH+2, getY()-1))
-                    moveTo(getX()+1, getY());
-                else
-                {
-                    changeDirection();
-                }
+                changeDirection();
             }
-            else if (getDirection()==180)
-            {
-                if (!getWorld()->isBlocking(getX()-2, getY()) && getWorld()->isBlocking(getX()-2, getY()-1))
-                    moveTo(getX()-2, getY());
-                else
-                    changeDirection();
-            }
+        }
+        else if (getDirection()==180)
+        {
+            if (!getWorld()->isBlocking(getX()-2, getY()))
+                moveTo(getX()-2, getY());
+            else
+                changeDirection();
         }
     }
     
 }
 
 
+
+void Goodies::Bonk(Actor* bonker)
+{
+    
+}
 
 
 

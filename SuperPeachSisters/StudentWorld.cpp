@@ -4,7 +4,7 @@
 using namespace std;
 
 
-int curr_level=3;
+int curr_level=1;
 
 
 GameWorld* createStudentWorld(string assetPath)
@@ -147,7 +147,6 @@ int StudentWorld::init()
                             break;
                         }
                     }
-           
             }
         }
            
@@ -172,7 +171,7 @@ int StudentWorld::move()
     
     (*myPeach).doSomething();
     
-
+    removeDead();
 
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -253,4 +252,52 @@ void StudentWorld:: setFire()
 void StudentWorld:: setPeachHP(int num)
 {
     myPeach->setHP(num);
+}
+
+
+
+
+
+
+
+void StudentWorld::bonkAllBonkables(int x, int y)
+{
+    vector<Actor*>::iterator it;
+    it = actorVect.begin();
+    while (it!=actorVect.end())
+    {
+        if ((*it)->overlap(x, y)&& (*it)->isAlive())
+            (*it)->Bonk(*it);
+        it++;
+    }
+}
+
+
+
+
+void StudentWorld::addObject(Actor* a)
+{
+    actorVect.push_back(a);
+}
+
+
+void StudentWorld:: removeDead()
+{
+    vector<Actor*>::iterator it;
+    it = actorVect.begin();
+    while (it!=actorVect.end())
+    {
+        if (!(*it)->isAlive())
+        {
+            delete (*it);
+            it = actorVect.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+    if (!myPeach->isAlive())
+        delete myPeach;
+    
 }

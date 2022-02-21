@@ -21,7 +21,6 @@ public:
     virtual bool isDamagable();
     virtual bool isEnemy();
     bool overlap(int xCoord, int yCoord);
-    void bonkAllBonkables(int xCoord, int yCoord);
     void changeDirection();
 
 
@@ -204,7 +203,8 @@ class Goodies: public Actor
 public:
     Goodies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Goodies();
-    void doSomething();    
+    void doSomething();
+    void Bonk(Actor* bonker);
     
     
 };
