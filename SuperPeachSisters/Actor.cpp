@@ -310,17 +310,20 @@ void Block:: Bonk(Actor* bonker)     //IMPLEMENT
         {
             Star* s = new Star(IID_STAR, getX(), getY()+SPRITE_HEIGHT+8, getWorld());
             getWorld()->addObject(s);
+            hasStar=false;
         }
             
         if (hasFlower)
         {
             Flower* f = new Flower(IID_FLOWER, getX(), getY()+ SPRITE_HEIGHT+8, getWorld());
             getWorld()->addObject(f);
+            hasFlower=false;
         }
         if (hasMushroom)
         {
             Mushroom* m = new Mushroom(IID_MUSHROOM, getX(),getY()+ SPRITE_HEIGHT+8, getWorld());
             getWorld()->addObject(m);
+            hasMushroom=false; 
         }
             
             
@@ -553,10 +556,7 @@ Enemies(imageID, startX, startY, sw)
 }
 
 
-Goomba::~Goomba()
-{
-    
-}
+Goomba::~Goomba(){}
 
 
 
@@ -583,17 +583,9 @@ Koopa::~Koopa()
 //GOODIES
 
 Goodies::Goodies(int imageID, int startX, int startY, StudentWorld* sw)
-: Actor(imageID, startX, startY, 0, 1, 1, sw)
-{
-    
-    
-    
-}
+: Actor(imageID, startX, startY, 0, 1, 1, sw){}
 
-Goodies::~Goodies()
-{
-    
-}
+Goodies::~Goodies(){}
 
 void Goodies::doSomething()
 {
