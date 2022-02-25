@@ -40,7 +40,7 @@ public:
   void levelUp();
     
   bool damageEnemies(int x, int y);
-  void damagePeach(int x, int y);
+  void bonkDamagePeach(int x, int y);
     
     
   bool doesPeachHaveStar();

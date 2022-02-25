@@ -166,13 +166,19 @@ int StudentWorld::move()
     
     vector<Actor*>::iterator it;
     it = actorVect.begin();
-    while (it!=actorVect.end())
+    while (it!=actorVect.end() && (*it)->isAlive())
     {
         (*it)->doSomething();
         it++;
     }
     
-    (*myPeach).doSomething();
+    if (!myPeach->isAlive())
+    {
+        playSound(SOUND_PLAYER_DIE);
+        return GWSTATUS_PLAYER_DIED;
+    }
+        
+        (*myPeach).doSomething();
     
     removeDead();
 
@@ -274,8 +280,8 @@ void StudentWorld::bonkAllBonkables(int x, int y)
         it++;
     }
     
-    if (myPeach->overlap(x,y) && myPeach->isAlive())
-        myPeach->Bonk();
+//    if (myPeach->overlap(x,y) && myPeach->isAlive())
+//        myPeach->Bonk();
     
 }
 
@@ -304,9 +310,6 @@ void StudentWorld:: removeDead()
             it++;
         }
     }
-    if (!myPeach->isAlive())
-        delete myPeach;
-    
 }
 
 
@@ -350,10 +353,10 @@ bool StudentWorld:: damageEnemies(int x, int y)
 
 
 
-void StudentWorld::damagePeach(int x, int y)
+void StudentWorld::bonkDamagePeach(int x, int y)
 {
     if (doesIntersectPeach(x, y))
-        myPeach->damage();
+        myPeach->Bonk();
 }
 
 

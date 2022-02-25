@@ -107,6 +107,7 @@ Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
     hasStar=false;
     hasFlower=false;
     remaining_jump_distance=0;
+    m_hitPoints=1;
     
     
 }
@@ -126,9 +127,19 @@ void Peach::decreaseHP()
 
 void Peach:: Bonk()     //IMPLEMENT
 {
-    decreaseHP();
-    
-
+    if (hasStar||tempInvinc)
+        return;
+    else
+    {
+        decreaseHP();
+        tempInvincibleTicks=10;
+        hasFlower=false;
+        hasJump=false;
+        if (m_hitPoints>=1)
+            getWorld()->playSound(SOUND_PLAYER_HURT);
+        if (m_hitPoints<=0)
+            setDead();
+    }
 }
 
 
@@ -176,8 +187,6 @@ void Peach:: doSomething()
     if (starPowerTicks==0)
         hasStar=false;
 
-    
-    
     if (tempInvinc==true)
         tempInvincibleTicks--;
     
@@ -587,6 +596,11 @@ void Enemies::doSomething()
     if (!isAlive())
         return;
     
+    if (getWorld()->doesIntersectPeach(getX(), getY()))
+    {
+        getWorld()->bonkDamagePeach(getX(), getY());
+        return;
+    }
     
     
     
@@ -828,14 +842,9 @@ void Goodies::Bonk()
 
 
 //STAR
-
-
-
 Star:: Star(int imageID, int startX, int startY, StudentWorld* sw) :Goodies(imageID, startX, startY, sw){}
 
-
 Star::~Star(){};
-
 
 void Star::doSomething()
 {
@@ -851,9 +860,7 @@ void Star::doSomething()
 
 Flower::Flower(int imageID, int startX, int startY, StudentWorld* sw)
 :Goodies(imageID, startX, startY, sw)
-{
-    
-}
+{}
 
 Flower::~Flower(){};
 
@@ -868,11 +875,7 @@ void Flower:: doSomething()
 }
 
 
-
-
 //MUSHROOM
-
-
 Mushroom::Mushroom(int imageID, int startX, int startY, StudentWorld* sw)
 :Goodies(imageID, startX, startY, sw)
 {}
@@ -890,8 +893,6 @@ void Mushroom:: doSomething()
 
 
 
-
-
 PiranhaFireball::PiranhaFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir)
 : Projectiles(imageID, startX, startY, dir, sw){}
 
@@ -902,15 +903,12 @@ void PiranhaFireball::doSomething()
 {
     if (getWorld()->doesIntersectPeach(getX(), getY()))
     {
-        getWorld()->damagePeach(getX(), getY());
+        getWorld()->bonkDamagePeach(getX(), getY());
         setDead();
         return;
     }
     
 Projectiles:Projectiles::doSomething();
-    
-    
-    
 }
 
 
@@ -942,19 +940,13 @@ void peachHelper::doSomething()
     
 
 peachFireball::peachFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir):
-peachHelper ( imageID,  startX,  startY,  sw,  dir)
+peachHelper (imageID,  startX,  startY,  sw,  dir)
 {}
 
-
-
 peachFireball::~peachFireball(){};
-
-
-
 
 shell::shell(int imageID, int startX, int startY, StudentWorld* sw, int dir)
 :peachFireball( imageID, startX, startY, sw, dir){}
 
 
 shell::~shell(){};
-
