@@ -16,12 +16,13 @@ public:
     void setDead();
     int returnHitPoints();
     StudentWorld* getWorld();
-    virtual void Bonk(Actor* bonker)=0;
+    virtual void Bonk()=0;
     virtual bool blockable();
     virtual bool isDamagable();
     virtual bool isEnemy();
     bool overlap(int xCoord, int yCoord);
     void changeDirection();
+    virtual void damage();
 
 
 private:
@@ -47,15 +48,16 @@ public:
     void setInvincible();
     bool isInvincible();
     bool isDamagable();
-    virtual void Bonk(Actor* bonker);
+    virtual void Bonk();
     void setJumpDistance();
-    
     
     void activateMushroom();
     void activateStar(int numTicks);
     void activateFlower();
     void setHP(int num);
     void decreaseHP();
+    void damage();
+
 
     
     
@@ -63,14 +65,22 @@ public:
     
 private:
     bool rechargeStatus;
+    
     bool tempInvinc;
+    bool invincible;
+    
     bool hasJump;
     bool hasStar;
     bool hasFlower;
     int remaining_jump_distance;
     bool isJumping;
     int m_hitPoints;
+    
     int starPowerTicks;
+    int tempInvincibleTicks;
+    
+    int time_to_recharge_before_next_fire; 
+    
     
 };
 
@@ -90,7 +100,7 @@ public:
     ~Pipe();
     void doSomething();
     bool blockable();
-    void Bonk(Actor* bonker);
+    void Bonk();
     
     
     
@@ -108,7 +118,7 @@ public:
     Block(int imageID, int startX, int startY, StudentWorld* sw, bool star, bool mush, bool flower);
     ~Block();
     void doSomething();
-    void Bonk(Actor* bonker);
+    void Bonk();
     
 private:
     bool hasStar;
@@ -131,7 +141,7 @@ public:
     Flag(int imageID, int startX, int startY, StudentWorld* sw);
     ~Flag();
     void doSomething();
-    void Bonk(Actor* bonker);
+    void Bonk();
     
 private:
     
@@ -145,7 +155,7 @@ public:
     Mario(int imageID, int startX, int startY, StudentWorld* sw);
     ~Mario();
     void doSomething();
-    void Bonk(Actor* bonker);
+    void Bonk();
     
     
     
@@ -164,9 +174,12 @@ class Enemies: public Actor
 public:
     Enemies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Enemies();
-    void doSomething();
-    void Bonk(Actor* bonker);
+    virtual void doSomething();
+    void Bonk();
     bool isEnemy();
+    bool isDamagable();
+    void damage();
+    
     
     
 private:
@@ -183,7 +196,6 @@ class Goomba: public Enemies
 public:
     Goomba (int imageID, int startX, int startY, StudentWorld* sw);
     ~Goomba();
- 
 };
 
 
@@ -193,20 +205,54 @@ class Koopa: public Enemies
 public:
     Koopa (int imageID, int startX, int startY, StudentWorld* sw);
     ~Koopa();
+};
+
+
+class Piranha: public Enemies
+{
+public:
+    Piranha(int imageID, int startX, int startY, StudentWorld* sw);
+    ~Piranha();
+    void doSomething();
+private:
+    int firingDelay;
+    
+    
+    
     
 };
 
 
 
-class Goodies: public Actor
+
+
+
+class Projectiles: public Actor
+{
+    
+public:
+    Projectiles(int imageID, int startX, int startY, int dir, StudentWorld* sw);
+    ~Projectiles();
+    void doSomething();
+    void Bonk();
+    virtual void hitBlockable();
+    
+    
+};
+
+
+
+
+
+
+class Goodies: public Projectiles
 {
 public:
     Goodies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Goodies();
     void doSomething();
-    void Bonk(Actor* bonker);
-    
-    
+    void Bonk();
+    void hitBlockable();
 };
 
 
@@ -244,6 +290,44 @@ public:
     ~Mushroom();
     void doSomething();
 };
+
+
+
+
+
+
+class PiranhaFireball:public Projectiles
+{
+public:
+    PiranhaFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir);
+    ~PiranhaFireball();
+    void doSomething();
+    
+    
+};
+
+
+
+class peachHelper: public Projectiles
+{
+public:
+    peachHelper(int imageID, int startX, int startY, StudentWorld* sw, int dir);
+    ~peachHelper();
+    void doSomething();
+};
+
+
+class peachFireball: public peachHelper
+{
+public:
+    peachFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir);
+    ~peachFireball();
+    
+    
+    
+    
+};
+
 
 
 

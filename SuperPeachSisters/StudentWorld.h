@@ -34,10 +34,19 @@ public:
   void addObject(Actor* a);
   void removeDead();
     
+  void whereIsPeach(int &x, int &y); 
+    
+    
+  void levelUp();
+    
+  bool damageEnemies(int x, int y);
+  void damagePeach(int x, int y);
+    
 
 private:
     Peach* myPeach;
     std::vector<Actor*> actorVect;
+    bool leveledUp;
     
 };
 

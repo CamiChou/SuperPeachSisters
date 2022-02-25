@@ -14,24 +14,16 @@ GameWorld* createStudentWorld(string assetPath)
 
 // Students:  Add code to this file, StudentWorld.h, Actor.h, and Actor.cpp
 
-StudentWorld::StudentWorld(string assetPath)
-: GameWorld(assetPath)
-{
-}
+StudentWorld::StudentWorld(string assetPath):GameWorld(assetPath){}
 
 
-StudentWorld::~StudentWorld()
-{
-    cleanUp();
-}
+StudentWorld::~StudentWorld(){cleanUp();}
 
 
 int StudentWorld::init()
 {
-
-    
+    leveledUp=false;
     Level lev(assetPath());
-    
     string level_file;
     if (curr_level==1)
         level_file = "level01.txt";
@@ -39,12 +31,7 @@ int StudentWorld::init()
         level_file = "level02.txt";
     else if (curr_level==3)
         level_file = "level03.txt";
-    
-    
     Level::LoadResult result = lev.loadLevel(level_file);
-    
-    
-    
     
     
     if (result == Level::load_fail_file_not_found)
@@ -52,7 +39,6 @@ int StudentWorld::init()
     else if (result == Level::load_fail_bad_format)
     {
         cerr << "level01.txt is improperly formatted" << endl;
-
     }
     
     
@@ -146,6 +132,12 @@ int StudentWorld::init()
                             actorVect.push_back(newKoopa);
                             break;
                         }
+                        case Level:: piranha:
+                        {
+                            Piranha* newPirhanna = new Piranha(IID_PIRANHA, a*SPRITE_WIDTH, b*SPRITE_HEIGHT, this);
+                            actorVect.push_back(newPirhanna);
+                            break;
+                        }
                     }
             }
         }
@@ -161,6 +153,17 @@ int StudentWorld::init()
 
 int StudentWorld::move()
 {
+    if (leveledUp==true)
+    {
+        playSound(SOUND_FINISHED_LEVEL);
+        return GWSTATUS_FINISHED_LEVEL;
+        
+    }
+    
+    
+    
+    
+    
     vector<Actor*>::iterator it;
     it = actorVect.begin();
     while (it!=actorVect.end())
@@ -267,9 +270,13 @@ void StudentWorld::bonkAllBonkables(int x, int y)
     while (it!=actorVect.end())
     {
         if ((*it)->overlap(x, y)&& (*it)->isAlive())
-            (*it)->Bonk(*it);
+            (*it)->Bonk();
         it++;
     }
+    
+    if (myPeach->overlap(x,y) && myPeach->isAlive())
+        myPeach->Bonk();
+    
 }
 
 
@@ -300,4 +307,51 @@ void StudentWorld:: removeDead()
     if (!myPeach->isAlive())
         delete myPeach;
     
+}
+
+
+void StudentWorld::levelUp()
+{
+    if (curr_level<3)
+        curr_level+=1;
+    leveledUp=true;
+}
+
+
+
+
+void StudentWorld:: whereIsPeach(int &x, int &y)
+{
+    x = myPeach->getX();
+    y = myPeach->getY();
+}
+
+
+
+
+bool StudentWorld:: damageEnemies(int x, int y)
+{
+    
+    vector<Actor*>::iterator it;
+    it = actorVect.begin();
+    bool didDamage=false;
+    while (it!=actorVect.end())
+    {
+
+        if ((*it)->overlap(x, y)&& (*it)->isDamagable())
+        {
+            (*it)->damage();
+            didDamage=true;
+        }
+        it++;
+    }
+    return didDamage;
+}
+
+
+
+void StudentWorld::damagePeach(int x, int y)
+{
+    if (doesIntersectPeach(x, y))
+        myPeach->damage();
 }
