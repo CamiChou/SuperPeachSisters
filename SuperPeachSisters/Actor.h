@@ -57,6 +57,7 @@ public:
     void setHP(int num);
     void decreaseHP();
     void damage();
+    bool peachHasStar();
 
 
     
@@ -65,10 +66,7 @@ public:
     
 private:
     bool rechargeStatus;
-    
-    bool tempInvinc;
-    bool invincible;
-    
+    bool tempInvinc;    
     bool hasJump;
     bool hasStar;
     bool hasFlower;
@@ -175,7 +173,7 @@ public:
     Enemies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Enemies();
     virtual void doSomething();
-    void Bonk();
+    virtual void Bonk();
     bool isEnemy();
     bool isDamagable();
     void damage();
@@ -205,6 +203,9 @@ class Koopa: public Enemies
 public:
     Koopa (int imageID, int startX, int startY, StudentWorld* sw);
     ~Koopa();
+    void Bonk();
+    void damage();
+    
 };
 
 
@@ -322,10 +323,14 @@ class peachFireball: public peachHelper
 public:
     peachFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir);
     ~peachFireball();
-    
-    
-    
-    
+};
+
+
+class shell: public peachFireball
+{
+public:
+    shell(int imageID, int startX, int startY, StudentWorld* sw, int dir);
+    ~shell();
 };
 
 

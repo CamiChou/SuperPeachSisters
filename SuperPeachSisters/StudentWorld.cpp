@@ -338,7 +338,7 @@ bool StudentWorld:: damageEnemies(int x, int y)
     while (it!=actorVect.end())
     {
 
-        if ((*it)->overlap(x, y)&& (*it)->isDamagable())
+        if ((*it)->overlap(x, y)&& (*it)->isDamagable()&&(*it)->isAlive())
         {
             (*it)->damage();
             didDamage=true;
@@ -354,4 +354,16 @@ void StudentWorld::damagePeach(int x, int y)
 {
     if (doesIntersectPeach(x, y))
         myPeach->damage();
+}
+
+
+
+bool StudentWorld:: doesPeachHaveStar()
+{
+    if (myPeach->peachHasStar())
+        return true;
+     
+    return false;
+    
+    
 }

@@ -22,7 +22,7 @@ public:
   virtual void cleanUp();
   bool isBlocking(int xCoord, int yCoord);
   bool doesIntersectPeach(int xCoord, int YCoord);
-    
+
   void setJump();
   void setStar(int numTicks);
   void setFire();
@@ -41,6 +41,9 @@ public:
     
   bool damageEnemies(int x, int y);
   void damagePeach(int x, int y);
+    
+    
+  bool doesPeachHaveStar();
     
 
 private:

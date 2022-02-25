@@ -103,7 +103,6 @@ Peach::Peach(int startX, int startY, StudentWorld* sw):
 Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
 {
     tempInvinc=false;
-    invincible=false;
     hasJump=false;
     hasStar=false;
     hasFlower=false;
@@ -155,7 +154,10 @@ void Peach::activateFlower()
     hasFlower=true;
 }
 
-
+bool Peach::peachHasStar()
+{
+    return hasStar;
+}
 
 
 
@@ -168,31 +170,24 @@ void Peach:: doSomething()
     if (!isAlive())
         return;
     
-    
-    if (invincible==true)
+    if (hasStar==true)
         starPowerTicks--;
+    
     if (starPowerTicks==0)
-        tempInvinc=false;
+        hasStar=false;
+
     
     
-    if (tempInvinc==false)
+    if (tempInvinc==true)
         tempInvincibleTicks--;
+    
     if (tempInvincibleTicks==0)
         tempInvinc=false;
-    
     
     if (time_to_recharge_before_next_fire>0)
         time_to_recharge_before_next_fire--;
     
-    
-    
-    
     getWorld()->bonkAllBonkables(getX(), getY());
-    
-    
-    
-    
-    
     
     
     //JUMP
@@ -559,6 +554,18 @@ Enemies::~Enemies()
 
 void Enemies::Bonk()
 {
+    if (!getWorld()->doesIntersectPeach(getX(), getY()))
+        return;
+    else
+    {
+        if (getWorld()->doesPeachHaveStar())  //HOW TO SEE IF SHE HAS INVINCIBILITY
+        {
+            getWorld()->playSound(SOUND_PLAYER_KICK);
+            getWorld()->increaseScore(100);
+            setDead();
+        }
+    }
+    
     
     
 }
@@ -639,12 +646,40 @@ Goomba::~Goomba(){}
 //KOOPA
 
 Koopa::Koopa(int imageID, int startX, int startY, StudentWorld* sw):
-Enemies(imageID, startX, startY, sw)
+Enemies(imageID, startX, startY, sw){}
+
+Koopa::~Koopa(){}
+
+
+
+
+void Koopa:: Bonk()  //ASK IF THIS IS OK
 {
+
+    Enemies::Enemies::Bonk();
+    if (!isAlive())
+    {
+        shell* newShell = new shell(IID_SHELL,getX(), getY(), getWorld(), getDirection());
+        getWorld()->addObject(newShell);
+    }
     
 }
 
-Koopa::~Koopa(){}
+
+
+void Koopa::damage()
+{
+    shell* newShell = new shell(IID_SHELL,getX(), getY(), getWorld(), getDirection());
+    getWorld()->addObject(newShell);
+    Enemies::Enemies::damage();
+
+    
+}
+
+
+
+
+
 
 
 
@@ -656,6 +691,9 @@ Piranha::Piranha(int imageID, int startX, int startY, StudentWorld* sw)
 
 
 Piranha::~Piranha(){};
+
+
+
 
 
 void Piranha::doSomething()
@@ -891,8 +929,6 @@ peachHelper::~peachHelper(){}
 
 void peachHelper::doSomething()
 {
-    
-    
     if (getWorld()->damageEnemies(getX(), getY()))
     {
         setDead();
@@ -907,8 +943,7 @@ void peachHelper::doSomething()
 
 peachFireball::peachFireball(int imageID, int startX, int startY, StudentWorld* sw, int dir):
 peachHelper ( imageID,  startX,  startY,  sw,  dir)
-{
-}
+{}
 
 
 
@@ -916,4 +951,10 @@ peachFireball::~peachFireball(){};
 
 
 
+
+shell::shell(int imageID, int startX, int startY, StudentWorld* sw, int dir)
+:peachFireball( imageID, startX, startY, sw, dir){}
+
+
+shell::~shell(){};
 
