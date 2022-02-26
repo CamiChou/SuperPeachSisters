@@ -1,6 +1,12 @@
 #include "StudentWorld.h"
 #include "GameConstants.h"
 #include <string>
+
+#include <iostream> // defines the overloads of the << operator
+#include <sstream>  // defines the type std::ostringstream
+#include <iomanip>  // defines the manipulator setw
+
+
 using namespace std;
 
 
@@ -12,7 +18,6 @@ GameWorld* createStudentWorld(string assetPath)
 	return new StudentWorld(assetPath);
 }
 
-// Students:  Add code to this file, StudentWorld.h, Actor.h, and Actor.cpp
 
 StudentWorld::StudentWorld(string assetPath):GameWorld(assetPath){}
 
@@ -153,16 +158,12 @@ int StudentWorld::init()
 
 int StudentWorld::move()
 {
+   
     if (leveledUp==true)
     {
         playSound(SOUND_FINISHED_LEVEL);
         return GWSTATUS_FINISHED_LEVEL;
-        
     }
-    
-    
-    
-    
     
     vector<Actor*>::iterator it;
     it = actorVect.begin();
@@ -178,11 +179,24 @@ int StudentWorld::move()
         return GWSTATUS_PLAYER_DIED;
     }
         
-        (*myPeach).doSomething();
+    (*myPeach).doSomething();
     
     removeDead();
+    
+    
+    displayScore();
+
+
 
     return GWSTATUS_CONTINUE_GAME;
+    
+
+    
+        
+    
+    
+    
+    
 }
 
 
@@ -367,6 +381,49 @@ bool StudentWorld:: doesPeachHaveStar()
         return true;
      
     return false;
+    
+}
+
+bool StudentWorld::doesPeachHaveFlower()
+{
+    if (myPeach->peachHasFlower())
+        return true;
+     
+    return false;
+    
+}
+bool StudentWorld::doesPeachHaveMushroom()
+{
+    if (myPeach->peachHasMushroom())
+        return true;
+     
+    return false;
+    
+}
+
+
+
+
+
+
+
+
+void StudentWorld:: displayScore()
+{
+    ostringstream oss;
+    oss << "Lives: " << getLives()  << " ";
+    oss << "Level: " << getLevel() << " ";
+    oss << "Points: " << getScore() << " ";
+    if (myPeach->peachHasStar())
+        oss << "StarPower! ";
+    if (myPeach->peachHasFlower())
+        oss<< "ShootPower! " ;
+    if (myPeach->peachHasMushroom())
+        oss << "JumpPower! ";
+    
+    string s = oss.str();
+    
+    setGameStatText(s);
     
     
 }

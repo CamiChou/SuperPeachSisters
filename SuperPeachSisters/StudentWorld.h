@@ -44,6 +44,12 @@ public:
     
     
   bool doesPeachHaveStar();
+  bool doesPeachHaveFlower();
+  bool doesPeachHaveMushroom();
+    
+    
+    
+  void displayScore();
     
 
 private:

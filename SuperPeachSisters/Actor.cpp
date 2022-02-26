@@ -138,7 +138,11 @@ void Peach:: Bonk()     //IMPLEMENT
         if (m_hitPoints>=1)
             getWorld()->playSound(SOUND_PLAYER_HURT);
         if (m_hitPoints<=0)
+        {
             setDead();
+            getWorld()->decLives();
+            
+        }
     }
 }
 
@@ -169,6 +173,17 @@ bool Peach::peachHasStar()
 {
     return hasStar;
 }
+
+
+bool Peach:: peachHasMushroom()
+{
+    return hasJump;
+}
+bool Peach:: peachHasFlower()
+{
+    return hasFlower;
+}
+
 
 
 
@@ -375,7 +390,7 @@ void Block:: Bonk()     //IMPLEMENT
         getWorld()->playSound(SOUND_POWERUP_APPEARS);
         if (hasStar)
         {
-            Star* s = new Star(IID_STAR, getX(), getY()+SPRITE_HEIGHT+8, getWorld());
+            Star* s = new Star(IID_STAR, getX(), getY()+8, getWorld());
             getWorld()->addObject(s);
             hasStar=false;
         }
@@ -617,7 +632,7 @@ void Enemies::doSomething()
     }
     else if (getDirection()==180)
     {
-        if (!getWorld()->isBlocking(getX()-1, getY()) && getWorld()->isBlocking(getX()-SPRITE_WIDTH-1, getY()-1))
+        if (!getWorld()->isBlocking(getX()-1, getY()) && getWorld()->isBlocking(getX()-SPRITE_WIDTH, getY()-1))
             moveTo(getX()-1, getY());
         else
             changeDirection();
@@ -848,9 +863,13 @@ Star::~Star(){};
 
 void Star::doSomething()
 {
+    if (getWorld()->doesIntersectPeach(getX(), getY()))
+    {
+        getWorld()->increaseScore(100);
+        getWorld()->setStar(150);
+    }
     Goodies::doSomething();
-    getWorld()->increaseScore(100);
-    getWorld()->setStar(150);
+        
 }
 
 
@@ -868,10 +887,17 @@ Flower::~Flower(){};
 
 void Flower:: doSomething()
 {
+    
+    if (getWorld()->doesIntersectPeach(getX(), getY()))
+    {
+        getWorld()->increaseScore(50);
+        
+        getWorld()->setFire();
+        getWorld()->setPeachHP(2);
+
+        
+    }
     Goodies::doSomething();
-    getWorld()->increaseScore(50);
-    getWorld()->setFire();
-    getWorld()->setPeachHP(2);
 }
 
 
@@ -885,10 +911,14 @@ Mushroom::~Mushroom(){};
 
 void Mushroom:: doSomething()
 {
+    if (getWorld()->doesIntersectPeach(getX(), getY()))
+    {
+        getWorld()->increaseScore(75);
+        getWorld()->setJump();
+        getWorld()->setPeachHP(2);
+    }
     Goodies::doSomething();
-    getWorld()->increaseScore(75);
-    getWorld()->setJump();
-    getWorld()->setPeachHP(2);
+
 }
 
 

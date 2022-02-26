@@ -58,6 +58,8 @@ public:
     void decreaseHP();
     void damage();
     bool peachHasStar();
+    bool peachHasMushroom();
+    bool peachHasFlower();
 
 
     
