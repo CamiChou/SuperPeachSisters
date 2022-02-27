@@ -14,8 +14,6 @@ GraphObject (ID, startX, startY, startDirection, depth, size)
 Actor:: ~Actor() {}
 
 
-
-
 void Actor::changeDirection()
 {
     if (getDirection()==0)
@@ -100,14 +98,22 @@ void Actor::damage(){}
 
 
 Peach::Peach(int startX, int startY, StudentWorld* sw):
-Actor(IID_PEACH, startX, startY, 0, 0, 1, sw)
+Actor(IID_PEACH, startX, startY, 0, 0, 1.0, sw)
 {
     tempInvinc=false;
     hasJump=false;
     hasStar=false;
     hasFlower=false;
+    isJumping=false;
     remaining_jump_distance=0;
     m_hitPoints=1;
+    
+    
+    
+    starPowerTicks=0;
+    tempInvincibleTicks=0;
+    time_to_recharge_before_next_fire=0;
+    
     
     
 }
@@ -131,6 +137,8 @@ void Peach:: Bonk()     //IMPLEMENT
         return;
     else
     {
+        
+        tempInvinc=true;
         decreaseHP();
         tempInvincibleTicks=10;
         hasFlower=false;
@@ -159,7 +167,7 @@ void Peach:: activateMushroom()
 {
     hasJump=true;
 }
-void Peach::activateStar(int ticks)
+void Peach::activateStar()
 {
     starPowerTicks=150;
     hasStar=true;
@@ -174,7 +182,6 @@ bool Peach::peachHasStar()
     return hasStar;
 }
 
-
 bool Peach:: peachHasMushroom()
 {
     return hasJump;
@@ -187,14 +194,11 @@ bool Peach:: peachHasFlower()
 
 
 
-
-
-
-
 void Peach:: doSomething()
 {
     if (!isAlive())
         return;
+    
     
     if (hasStar==true)
         starPowerTicks--;
@@ -208,10 +212,15 @@ void Peach:: doSomething()
     if (tempInvincibleTicks==0)
         tempInvinc=false;
     
+    
+    
     if (time_to_recharge_before_next_fire>0)
         time_to_recharge_before_next_fire--;
     
+    
     getWorld()->bonkAllBonkables(getX(), getY());
+    
+    
     
     
     //JUMP
@@ -478,12 +487,12 @@ Actor(imageID,  startX,  startY,  0,  1,  1, sw)
 
 
 
-void Flag:: Bonk()     //IMPLEMENT
+void Flag:: Bonk(){}
+
+void Flag:: toDoNext()
 {
-    
+    getWorld()->levelUp();
 }
-
-
 
 
 
@@ -497,7 +506,7 @@ void Flag:: doSomething()
     {
         getWorld()->increaseScore(1000);
         setDead();
-        getWorld()->levelUp();
+        toDoNext();
     }
         
     
@@ -520,23 +529,20 @@ Flag(imageID,  startX,  startY, sw)
 
 
 
-void Mario:: doSomething()
+
+
+Mario::~Mario(){}
+
+
+void Mario::toDoNext()
 {
-    
+    getWorld()->GameOver();
 }
 
 
-Mario::~Mario()
-{
-    
-}
 
-
-void Mario:: Bonk()     //IMPLEMENT
-{
-    
-}
-
+void Mario:: Bonk(){}
+ 
 
 
 
@@ -564,16 +570,11 @@ void Mario:: Bonk()     //IMPLEMENT
 
 
 Enemies::Enemies(int imageID, int startX, int startY, StudentWorld* sw)
-: Actor(imageID, startX, startY, 180* (rand()%2), 1, 1, sw)
-{
-    
-}
+: Actor(imageID, startX, startY, 180* (rand()%2), 1, 1, sw) {}
 
 
 Enemies::~Enemies()
-{
-    
-}
+{}
 
 
 void Enemies::Bonk()
@@ -660,16 +661,10 @@ bool Enemies:: isDamagable()
 
 
 Goomba::Goomba(int imageID, int startX, int startY, StudentWorld* sw):
-Enemies(imageID, startX, startY, sw)
-{
-    
-}
+Enemies(imageID, startX, startY, sw){}
 
 
 Goomba::~Goomba(){}
-
-
-
 
 
 //KOOPA
@@ -682,7 +677,7 @@ Koopa::~Koopa(){}
 
 
 
-void Koopa:: Bonk()  //ASK IF THIS IS OK
+void Koopa:: Bonk()
 {
 
     Enemies::Enemies::Bonk();
@@ -700,7 +695,7 @@ void Koopa::damage()
 {
     shell* newShell = new shell(IID_SHELL,getX(), getY(), getWorld(), getDirection());
     getWorld()->addObject(newShell);
-    Enemies::Enemies::damage();
+    Enemies::damage();
 
     
 }
@@ -730,9 +725,10 @@ void Piranha::doSomething()
     if (!isAlive())
         return;
     increaseAnimationNumber();
+    
     if (getWorld()->doesIntersectPeach(getX(), getY()))
     {
-        getWorld()->bonkAllBonkables(getX(), getY());
+        getWorld()->bonkDamagePeach(getX(), getY());
         return;
     }
     
@@ -787,9 +783,6 @@ void Projectiles::doSomething()
     if (!getWorld()->isBlocking(getX(), getY()-2))
         moveTo(getX(), getY()-2);
     
-
-    
-    
     
     if (getDirection()==0)
     {
@@ -820,6 +813,9 @@ void Projectiles::hitBlockable()
 
 
 
+
+
+
 //GOODIES
 
 Goodies::Goodies(int imageID, int startX, int startY, StudentWorld* sw)
@@ -835,7 +831,7 @@ void Goodies::doSomething()
         getWorld()->playSound(SOUND_PLAYER_POWERUP);
         return;
     }
-Projectiles:Projectiles::doSomething();
+Projectiles::doSomething();
     
 }
 
@@ -866,7 +862,7 @@ void Star::doSomething()
     if (getWorld()->doesIntersectPeach(getX(), getY()))
     {
         getWorld()->increaseScore(100);
-        getWorld()->setStar(150);
+        getWorld()->setStar();
     }
     Goodies::doSomething();
         
@@ -937,8 +933,7 @@ void PiranhaFireball::doSomething()
         setDead();
         return;
     }
-    
-Projectiles:Projectiles::doSomething();
+Projectiles::doSomething();
 }
 
 
@@ -963,7 +958,7 @@ void peachHelper::doSomething()
         return;
     }
     else
-        Projectiles:Projectiles::doSomething();
+        Projectiles::doSomething();
 }
 
     

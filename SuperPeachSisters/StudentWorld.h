@@ -17,14 +17,14 @@ class StudentWorld : public GameWorld
 public:
   StudentWorld(std::string assetPath);
   ~StudentWorld();
-  virtual int init();
-  virtual int move();
-  virtual void cleanUp();
+  int init();
+  int move();
+  void cleanUp();
   bool isBlocking(int xCoord, int yCoord);
   bool doesIntersectPeach(int xCoord, int YCoord);
 
   void setJump();
-  void setStar(int numTicks);
+  void setStar();
   void setFire();
     
     
@@ -38,9 +38,12 @@ public:
     
     
   void levelUp();
+  void GameOver();
+
     
   bool damageEnemies(int x, int y);
   void bonkDamagePeach(int x, int y);
+    
     
     
   bool doesPeachHaveStar();
@@ -56,6 +59,7 @@ private:
     Peach* myPeach;
     std::vector<Actor*> actorVect;
     bool leveledUp;
+    bool gameOver;
     
 };
 

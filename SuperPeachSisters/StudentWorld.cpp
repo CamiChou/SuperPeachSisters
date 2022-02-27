@@ -18,42 +18,38 @@ GameWorld* createStudentWorld(string assetPath)
 	return new StudentWorld(assetPath);
 }
 
-
 StudentWorld::StudentWorld(string assetPath):GameWorld(assetPath){}
 
-
 StudentWorld::~StudentWorld(){cleanUp();}
-
 
 int StudentWorld::init()
 {
     leveledUp=false;
     Level lev(assetPath());
     string level_file;
-    if (curr_level==1)
-        level_file = "level01.txt";
-    else if (curr_level==2)
-        level_file = "level02.txt";
-    else if (curr_level==3)
-        level_file = "level03.txt";
+    
+    
+    
+    ostringstream oss;
+    oss << "level" << setw(2) << setfill('0') << curr_level << ".txt";
+    string st = oss.str();
+    level_file=st;
     Level::LoadResult result = lev.loadLevel(level_file);
     
     
     if (result == Level::load_fail_file_not_found)
-        cerr << "Could not find level01.txt data file" << endl;
+        return GWSTATUS_LEVEL_ERROR;
     else if (result == Level::load_fail_bad_format)
     {
-        cerr << "level01.txt is improperly formatted" << endl;
+        return GWSTATUS_LEVEL_ERROR;
     }
-    
     
     
     else if (result == Level::load_success)
     {
         cerr << "Successfully loaded level" << endl;
         Level::GridEntry ge;
-        
-        
+    
         for (int a=0; a<GRID_WIDTH ; a++)
         {
             for (int b=0; b<GRID_HEIGHT ; b++)
@@ -63,7 +59,7 @@ int StudentWorld::init()
                     {
                     case Level::empty:
                         {
-               //           cout << "Location 5,10 is empty" << endl;
+                         cerr << "empty" << endl;
                             break;
                         }
                     case Level::block:
@@ -146,25 +142,13 @@ int StudentWorld::init()
                     }
             }
         }
-           
-        
-        
     
     }
-    
-    
     return GWSTATUS_CONTINUE_GAME;
 }
 
 int StudentWorld::move()
 {
-   
-    if (leveledUp==true)
-    {
-        playSound(SOUND_FINISHED_LEVEL);
-        return GWSTATUS_FINISHED_LEVEL;
-    }
-    
     vector<Actor*>::iterator it;
     it = actorVect.begin();
     while (it!=actorVect.end() && (*it)->isAlive())
@@ -172,31 +156,33 @@ int StudentWorld::move()
         (*it)->doSomething();
         it++;
     }
-    
-    if (!myPeach->isAlive())
+    if (myPeach->isAlive())
+        (*myPeach).doSomething();
+
+    else if (!myPeach->isAlive())
     {
         playSound(SOUND_PLAYER_DIE);
         return GWSTATUS_PLAYER_DIED;
     }
         
-    (*myPeach).doSomething();
+    if (leveledUp==true)
+    {
+        playSound(SOUND_FINISHED_LEVEL);
+        return GWSTATUS_FINISHED_LEVEL;
+    }
+    
+    if (gameOver==true)
+    {
+        playSound(SOUND_GAME_OVER);
+        return GWSTATUS_PLAYER_WON; 
+    }
+    
     
     removeDead();
     
-    
     displayScore();
-
-
-
+    
     return GWSTATUS_CONTINUE_GAME;
-    
-
-    
-        
-    
-    
-    
-    
 }
 
 
@@ -213,13 +199,6 @@ void StudentWorld::cleanUp()
     }
     delete myPeach;
 }
-
-
-
-
-
-
-
 
 
 
@@ -260,9 +239,9 @@ void StudentWorld:: setJump()
 {
     myPeach->activateMushroom();
 }
-void StudentWorld:: setStar(int ticks)
+void StudentWorld:: setStar()
 {
-    myPeach->activateStar(ticks);
+    myPeach->activateStar();
 }
 void StudentWorld:: setFire()
 {
@@ -293,12 +272,7 @@ void StudentWorld::bonkAllBonkables(int x, int y)
             (*it)->Bonk();
         it++;
     }
-    
-//    if (myPeach->overlap(x,y) && myPeach->isAlive())
-//        myPeach->Bonk();
-    
 }
-
 
 
 
@@ -329,9 +303,17 @@ void StudentWorld:: removeDead()
 
 void StudentWorld::levelUp()
 {
-    if (curr_level<3)
+    if (!gameOver)
         curr_level+=1;
     leveledUp=true;
+    playSound(SOUND_FINISHED_LEVEL);
+}
+
+
+
+void StudentWorld:: GameOver()
+{
+    gameOver=true;
 }
 
 
@@ -355,7 +337,7 @@ bool StudentWorld:: damageEnemies(int x, int y)
     while (it!=actorVect.end())
     {
 
-        if ((*it)->overlap(x, y)&& (*it)->isDamagable()&&(*it)->isAlive())
+        if ((*it)->isEnemy()&&(*it)->overlap(x, y)&& (*it)->isDamagable()&&(*it)->isAlive())
         {
             (*it)->damage();
             didDamage=true;
@@ -412,18 +394,14 @@ void StudentWorld:: displayScore()
 {
     ostringstream oss;
     oss << "Lives: " << getLives()  << " ";
-    oss << "Level: " << getLevel() << " ";
-    oss << "Points: " << getScore() << " ";
+    oss << "Level: 0" << getLevel() << " ";
+    oss << "Points: " << setw(6) << setfill('0') << getScore() << " ";
     if (myPeach->peachHasStar())
         oss << "StarPower! ";
     if (myPeach->peachHasFlower())
         oss<< "ShootPower! " ;
     if (myPeach->peachHasMushroom())
         oss << "JumpPower! ";
-    
     string s = oss.str();
-    
     setGameStatText(s);
-    
-    
 }

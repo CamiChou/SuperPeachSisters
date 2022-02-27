@@ -48,11 +48,11 @@ public:
     void setInvincible();
     bool isInvincible();
     bool isDamagable();
-    virtual void Bonk();
+    void Bonk();
     void setJumpDistance();
     
     void activateMushroom();
-    void activateStar(int numTicks);
+    void activateStar();
     void activateFlower();
     void setHP(int num);
     void decreaseHP();
@@ -61,13 +61,8 @@ public:
     bool peachHasMushroom();
     bool peachHasFlower();
 
-
-    
-    
-    
     
 private:
-    bool rechargeStatus;
     bool tempInvinc;    
     bool hasJump;
     bool hasStar;
@@ -78,6 +73,7 @@ private:
     
     int starPowerTicks;
     int tempInvincibleTicks;
+    
     
     int time_to_recharge_before_next_fire; 
     
@@ -102,12 +98,6 @@ public:
     bool blockable();
     void Bonk();
     
-    
-    
-private:
-      
-    
-    
 };
 
 
@@ -125,9 +115,6 @@ private:
     bool hasMushroom;
     bool hasFlower;
     
-    
-    
-    
 };
 
 
@@ -142,8 +129,7 @@ public:
     ~Flag();
     void doSomething();
     void Bonk();
-    
-private:
+    virtual void toDoNext();
     
 };
 
@@ -154,15 +140,8 @@ class Mario: public Flag
 public:
     Mario(int imageID, int startX, int startY, StudentWorld* sw);
     ~Mario();
-    void doSomething();
     void Bonk();
-    
-    
-    
-private:
-    
-    
-    
+    void toDoNext();
     
 };
 
@@ -179,11 +158,6 @@ public:
     bool isEnemy();
     bool isDamagable();
     void damage();
-    
-    
-    
-private:
-    
     
 };
 
@@ -217,11 +191,9 @@ public:
     Piranha(int imageID, int startX, int startY, StudentWorld* sw);
     ~Piranha();
     void doSomething();
+
 private:
     int firingDelay;
-    
-    
-    
     
 };
 
@@ -236,11 +208,9 @@ class Projectiles: public Actor
 public:
     Projectiles(int imageID, int startX, int startY, int dir, StudentWorld* sw);
     ~Projectiles();
-    void doSomething();
+    virtual void doSomething();
     void Bonk();
     virtual void hitBlockable();
-    
-    
 };
 
 
@@ -253,7 +223,7 @@ class Goodies: public Projectiles
 public:
     Goodies(int imageID, int startX, int startY, StudentWorld* sw);
     ~Goodies();
-    void doSomething();
+    virtual void doSomething();
     void Bonk();
     void hitBlockable();
 };
