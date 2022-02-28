@@ -25,6 +25,7 @@ StudentWorld::~StudentWorld(){cleanUp();}
 int StudentWorld::init()
 {
     leveledUp=false;
+    gameOver=false;
     Level lev(assetPath());
     string level_file;
     
@@ -59,7 +60,6 @@ int StudentWorld::init()
                     {
                     case Level::empty:
                         {
-                         cerr << "empty" << endl;
                             break;
                         }
                     case Level::block:

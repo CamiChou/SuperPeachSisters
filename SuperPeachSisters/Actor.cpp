@@ -23,7 +23,6 @@ void Actor::changeDirection()
 }
 
 
-
 bool Actor:: isAlive()
 {
     return m_alive;
@@ -113,9 +112,6 @@ Actor(IID_PEACH, startX, startY, 0, 0, 1.0, sw)
     starPowerTicks=0;
     tempInvincibleTicks=0;
     time_to_recharge_before_next_fire=0;
-    
-    
-    
 }
 
 
@@ -131,7 +127,7 @@ void Peach::decreaseHP()
 
 
 
-void Peach:: Bonk()     //IMPLEMENT
+void Peach:: Bonk()
 {
     if (hasStar||tempInvinc)
         return;
@@ -182,6 +178,7 @@ bool Peach::peachHasStar()
     return hasStar;
 }
 
+
 bool Peach:: peachHasMushroom()
 {
     return hasJump;
@@ -190,6 +187,10 @@ bool Peach:: peachHasFlower()
 {
     return hasFlower;
 }
+
+
+
+
 
 
 
@@ -240,7 +241,6 @@ void Peach:: doSomething()
     }
     
     //FALL
-    
     else if (!getWorld()->isBlocking(getX(), getY()-2)||!getWorld()->isBlocking(getX(), getY()-1||!getWorld()->isBlocking(getX(), getY()-3)))
     {
         moveTo(getX(), getY()-4);
@@ -324,28 +324,11 @@ void Peach:: doSomething()
                         peachFireball* newPeachFireball = new peachFireball(IID_PEACH_FIRE, getX()-4,getY(), getWorld(), 180);
                         getWorld()->addObject(newPeachFireball);
                     }
-                
-                       
-
-
-
-
                 }
-
                 break;
             }
-                
-                
-                
-            
-                
         }
-    
     }
-    
-    
-    
-    
 }
 
 
@@ -390,7 +373,7 @@ Pipe(imageID,  startX,  startY, sw)
 
 
 
-void Block:: Bonk()     //IMPLEMENT
+void Block:: Bonk()
 {
     if (hasStar==false && hasFlower==false && hasMushroom==false)
         getWorld()->playSound(SOUND_PLAYER_BONK);
@@ -423,13 +406,7 @@ void Block:: Bonk()     //IMPLEMENT
 }
 
 
-Block::~Block()
-{
-    
-}
-
-
-void Block::doSomething() {}
+Block::~Block(){}
 
 
 
@@ -437,37 +414,22 @@ void Block::doSomething() {}
 //PIPE
 Pipe::Pipe(int imageID, int startX, int startY, StudentWorld* sw):
 Actor(imageID,  startX,  startY,  0,  2,  1, sw)
-{
-    
-}
+{}
 
 
-void Pipe:: Bonk()     //IMPLEMENT
-{
-    
-}
+void Pipe:: Bonk(){}
 
 
-
-void Pipe:: doSomething()
-{
-    
-}
+void Pipe:: doSomething(){}
 
 
-Pipe::~Pipe()
-{
-    
-}
-
+Pipe::~Pipe(){}
 
 
 bool Pipe:: blockable()
 {
     return true;
 }
-
-
 
 
 
@@ -480,12 +442,7 @@ bool Pipe:: blockable()
 
 //FLAG
 Flag::Flag(int imageID, int startX, int startY, StudentWorld* sw):
-Actor(imageID,  startX,  startY,  0,  1,  1, sw)
-{
-    
-}
-
-
+Actor(imageID,  startX,  startY,  0,  1,  1, sw){}
 
 void Flag:: Bonk(){}
 
@@ -529,8 +486,6 @@ Flag(imageID,  startX,  startY, sw)
 
 
 
-
-
 Mario::~Mario(){}
 
 
@@ -538,10 +493,6 @@ void Mario::toDoNext()
 {
     getWorld()->GameOver();
 }
-
-
-
-void Mario:: Bonk(){}
  
 
 
@@ -617,9 +568,6 @@ void Enemies::doSomething()
         getWorld()->bonkDamagePeach(getX(), getY());
         return;
     }
-    
-    
-    
     
     
     if (getDirection()==0)
@@ -713,11 +661,7 @@ Piranha::Piranha(int imageID, int startX, int startY, StudentWorld* sw)
     firingDelay=0;
 }
 
-
 Piranha::~Piranha(){};
-
-
-
 
 
 void Piranha::doSomething()
@@ -807,7 +751,6 @@ void Projectiles::Bonk(){}
 void Projectiles::hitBlockable()
 {
     setDead();
-    changeDirection();
 }
 
 
@@ -842,13 +785,6 @@ void Goodies::hitBlockable()
     
 }
 
-
-
-
-void Goodies::Bonk()
-{
-    
-}
 
 
 
@@ -944,11 +880,7 @@ Projectiles::doSomething();
 peachHelper::peachHelper (int imageID, int startX, int startY, StudentWorld* sw, int dir)
 : Projectiles(imageID, startX, startY, dir, sw){}
 
-
-
-
 peachHelper::~peachHelper(){}
-
 
 void peachHelper::doSomething()
 {
@@ -957,8 +889,7 @@ void peachHelper::doSomething()
         setDead();
         return;
     }
-    else
-        Projectiles::doSomething();
+    Projectiles::doSomething();
 }
 
     
@@ -969,6 +900,9 @@ peachHelper (imageID,  startX,  startY,  sw,  dir)
 {}
 
 peachFireball::~peachFireball(){};
+
+
+
 
 shell::shell(int imageID, int startX, int startY, StudentWorld* sw, int dir)
 :peachFireball( imageID, startX, startY, sw, dir){}
